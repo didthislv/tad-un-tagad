@@ -58,14 +58,14 @@
 
         header {
             text-align: center;
-            padding: 15px 10px 10px 10px;
+            padding: 8px 10px 5px 10px;
             position: relative;
             flex-shrink: 0;
         }
 
         h1 {
             font-family: 'Oswald', sans-serif;
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            font-size: clamp(1.2rem, 4vw, 2rem);
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.1em;
@@ -73,7 +73,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             animation: glowPulse 3s ease-in-out infinite;
         }
 
@@ -83,8 +83,8 @@
         }
 
         .subtitle {
-            font-size: 0.85rem;
-            opacity: 0.8;
+            font-size: 0.7rem;
+            opacity: 0.7;
             font-style: italic;
             letter-spacing: 0.05em;
         }
@@ -137,15 +137,15 @@
             background: linear-gradient(135deg, var(--accent), #c7315a);
             color: white;
             border: none;
-            padding: 10px 25px;
+            padding: 8px 20px;
             border-radius: 50px;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.05em;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 3px 15px rgba(233, 69, 96, 0.4);
+            box-shadow: 0 2px 10px rgba(233, 69, 96, 0.4);
             touch-action: manipulation;
         }
 
@@ -195,16 +195,16 @@
         }
 
         .controls-panel {
-            background: rgba(26, 26, 46, 0.95);
+            background: rgba(0, 0, 0, 0.98);
             backdrop-filter: blur(20px);
-            padding: 12px 15px;
+            padding: 8px 12px 10px 12px;
             margin: 0;
-            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
             flex-shrink: 0;
         }
 
         .control-group {
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
         .control-group:last-child {
@@ -216,10 +216,10 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 6px;
-            font-size: 0.8rem;
+            margin-bottom: 4px;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.05em;
             color: var(--gold);
         }
 
@@ -282,9 +282,9 @@
 
         .comparison-slider {
             position: absolute;
-            top: 50%;
+            bottom: 20px;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
             width: calc(100% - 40px);
             z-index: 10;
         }
@@ -323,10 +323,10 @@
 
         .action-buttons {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-top: 10px;
+            margin-top: 6px;
         }
 
         .btn-secondary {
@@ -456,6 +456,7 @@
                 <img id="historical-comparison" alt="Vēsturiskais attēls">
                 <img id="captured-image" alt="Uzņemtais attēls">
                 <div class="slider-divider" id="sliderDivider"></div>
+                <input type="range" class="comparison-slider" id="comparisonSlider" min="0" max="100" value="50">
             </div>
         </div>
 
@@ -474,13 +475,6 @@
                     <span class="control-value" id="zoomValue">1.0x</span>
                 </div>
                 <input type="range" id="zoomSlider" min="100" max="300" value="100">
-            </div>
-
-            <div class="control-group" id="sliderControlGroup" style="display: none;">
-                <div class="control-label">
-                    <span>Salīdzinājuma slīdnis</span>
-                </div>
-                <input type="range" class="comparison-slider" id="comparisonSlider" min="0" max="100" value="50">
             </div>
 
             <div class="action-buttons">
@@ -642,14 +636,12 @@
             const sliderComp = document.getElementById('sliderComparison');
             const video = document.getElementById('video-feed');
             const overlay = document.getElementById('historical-overlay');
-            const sliderControlGroup = document.getElementById('sliderControlGroup');
             const compareBtn = document.getElementById('compareBtn');
 
             if (sliderComp.classList.contains('active')) {
                 sliderComp.classList.remove('active');
                 video.style.display = 'block';
                 overlay.style.display = 'block';
-                sliderControlGroup.style.display = 'none';
                 compareBtn.textContent = '🔄 Salīdzināt';
             } else {
                 if (!capturedImageData) {
@@ -659,7 +651,6 @@
                 sliderComp.classList.add('active');
                 video.style.display = 'none';
                 overlay.style.display = 'none';
-                sliderControlGroup.style.display = 'block';
                 compareBtn.textContent = '📹 Atpakaļ uz kameru';
                 updateSliderComparison(50);
             }
@@ -673,9 +664,15 @@
         function updateSliderComparison(value) {
             const divider = document.getElementById('sliderDivider');
             const historicalImg = document.getElementById('historical-comparison');
+            const capturedImg = document.getElementById('captured-image');
             
             divider.style.left = value + '%';
+            
+            // Historical image shows on left side
             historicalImg.style.clipPath = `inset(0 ${100 - value}% 0 0)`;
+            
+            // Captured image shows on right side
+            capturedImg.style.clipPath = `inset(0 0 0 ${value}%)`;
         }
 
         // Save comparison
