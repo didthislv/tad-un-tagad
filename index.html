@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Tad un Tagad - Fotoattēlu Salīdzināšana</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #e94560;
+            --light: #f1f1f1;
+            --gold: #d4af37;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulance type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            opacity: 0.3;
+            z-index: 9999;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            background: linear-gradient(90deg, var(--gold), var(--accent), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4)); }
+            50% { filter: drop-shadow(0 0 20px rgba(233, 69, 96, 0.6)); }
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+            font-style: italic;
+            letter-spacing: 0.05em;
+        }
+
+        .upload-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 2px dashed var(--gold);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px auto;
+            max-width: 600px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-section:active {
+            transform: scale(0.98);
+        }
+
+        .upload-section:hover {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(233, 69, 96, 0.3);
+        }
+
+        .upload-section.active {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .btn {
+            font-family: 'Oswald', sans-serif;
+            background: linear-gradient(135deg, var(--accent), #c7315a);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(233, 69, 96, 0.4);
+            touch-action: manipulation;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(233, 69, 96, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .camera-container {
+            display: none;
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            background: #000;
+        }
+
+        .camera-container.active {
+            display: block;
+        }
+
+        #video-feed {
+            width: 100%;
+            display: block;
+            background: #000;
+            transform-origin: center;
+        }
+
+        #historical-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .controls-panel {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px auto;
+            max-width: 900px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .control-group {
+            margin-bottom: 25px;
+        }
+
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-label {
+            font-family: 'Oswald', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gold);
+        }
+
+        .control-value {
+            font-family: 'Lora', serif;
+            color: var(--light);
+            font-weight: 600;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--accent));
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(233, 69, 96, 0.5);
+            transition: all 0.2s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:active {
+            transform: scale(1.2);
+            box-shadow: 0 0 25px rgba(233, 69, 96, 0.8);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--accent));
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 15px rgba(233, 69, 96, 0.5);
+        }
+
+        .slider-comparison {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: none;
+            background: #000;
+        }
+
+        .slider-comparison.active {
+            display: block;
+        }
+
+        .comparison-slider {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: calc(100% - 40px);
+            z-index: 10;
+        }
+
+        #captured-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .slider-divider {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--gold), var(--accent));
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.6);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        #historical-comparison {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            clip-path: inset(0 50% 0 0);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--gold), #b8941f);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.6);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #666, #444);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 8px 30px rgba(100, 100, 100, 0.6);
+        }
+
+        canvas {
+            display: none;
+        }
+
+        #download-link {
+            display: none;
+        }
+
+        .error-message {
+            background: rgba(233, 69, 96, 0.2);
+            border: 2px solid var(--accent);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .error-message h3 {
+            font-family: 'Oswald', sans-serif;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            header {
+                padding: 20px 10px;
+            }
+
+            .upload-section {
+                padding: 30px 20px;
+            }
+
+            .controls-panel {
+                padding: 20px 15px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .camera-container, .controls-panel {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-family: 'Oswald', sans-serif;
+            color: var(--gold);
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grain-overlay"></div>
+    
+    <div class="container">
+        <header>
+            <h1>Tad un Tagad</h1>
+            <p class="subtitle">Salīdzini vēsturi ar tagadni</p>
+        </header>
+
+        <div class="upload-section" id="uploadSection" onclick="document.getElementById('historicalInput').click()">
+            <div class="upload-icon">📸</div>
+            <h2>Augšupielādē vēsturisko attēlu</h2>
+            <p style="margin-top: 15px; opacity: 0.8;">Noklikšķini šeit, lai izvēlētos attēlu</p>
+            <input type="file" id="historicalInput" accept="image/*">
+        </div>
+
+        <div id="errorContainer"></div>
+
+        <div class="camera-container" id="cameraContainer">
+            <video id="video-feed" autoplay playsinline muted></video>
+            <img id="historical-overlay" alt="Vēsturiskais attēls">
+            <canvas id="snapshot-canvas"></canvas>
+            
+            <div class="slider-comparison" id="sliderComparison">
+                <img id="historical-comparison" alt="Vēsturiskais attēls">
+                <img id="captured-image" alt="Uzņemtais attēls">
+                <div class="slider-divider" id="sliderDivider"></div>
+            </div>
+        </div>
+
+        <div class="controls-panel" id="controlsPanel" style="display: none;">
+            <div class="control-group">
+                <div class="control-label">
+                    <span>Vēsturiskā attēla caurspīdīgums</span>
+                    <span class="control-value" id="opacityValue">50%</span>
+                </div>
+                <input type="range" id="opacitySlider" min="0" max="100" value="50">
+            </div>
+
+            <div class="control-group">
+                <div class="control-label">
+                    <span>Tālummaiņa (Zoom)</span>
+                    <span class="control-value" id="zoomValue">1.0x</span>
+                </div>
+                <input type="range" id="zoomSlider" min="100" max="300" value="100">
+            </div>
+
+            <div class="control-group" id="sliderControlGroup" style="display: none;">
+                <div class="control-label">
+                    <span>Salīdzinājuma slīdnis</span>
+                </div>
+                <input type="range" class="comparison-slider" id="comparisonSlider" min="0" max="100" value="50">
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn" id="captureBtn" onclick="capturePhoto()">📷 Uzņemt foto</button>
+                <button class="btn btn-secondary" id="compareBtn" style="display: none;" onclick="toggleComparison()">🔄 Salīdzināt</button>
+                <button class="btn btn-secondary" id="saveBtn" style="display: none;" onclick="saveComparison()">💾 Saglabāt</button>
+                <button class="btn btn-danger" onclick="resetApp()">🔄 Sākt no jauna</button>
+            </div>
+        </div>
+    </div>
+
+    <a id="download-link" download="tad-un-tagad-salīdzinājums.jpg"></a>
+
+    <script>
+        let stream = null;
+        let historicalImage = null;
+        let capturedImageData = null;
+        let currentZoom = 1;
+
+        // Check if we're on HTTPS or localhost
+        function checkSecureContext() {
+            if (!window.isSecureContext) {
+                showError('Drošības iemeslu dēļ kamera darbojas tikai ar HTTPS savienojumu. Lūdzu, izmanto šo aplikāciju caur HTTPS vai localhost.');
+                return false;
+            }
+            return true;
+        }
+
+        function showError(message) {
+            const errorContainer = document.getElementById('errorContainer');
+            errorContainer.innerHTML = `
+                <div class="error-message">
+                    <h3>⚠️ Brīdinājums</h3>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+
+        // Upload historical image
+        document.getElementById('historicalInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    historicalImage = event.target.result;
+                    document.getElementById('historical-overlay').src = historicalImage;
+                    document.getElementById('historical-comparison').src = historicalImage;
+                    document.getElementById('uploadSection').classList.add('active');
+                    
+                    if (checkSecureContext()) {
+                        startCamera();
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Start camera with better error handling
+        async function startCamera() {
+            const errorContainer = document.getElementById('errorContainer');
+            errorContainer.innerHTML = '<div class="loading">Kameras aktivizēšana</div>';
+
+            try {
+                // Try to get back camera first (better for comparison photos)
+                const constraints = {
+                    video: {
+                        facingMode: { ideal: 'environment' },
+                        width: { ideal: 1920 },
+                        height: { ideal: 1080 }
+                    },
+                    audio: false
+                };
+
+                stream = await navigator.mediaDevices.getUserMedia(constraints);
+                const video = document.getElementById('video-feed');
+                video.srcObject = stream;
+                
+                // Wait for video to be ready
+                video.onloadedmetadata = () => {
+                    video.play();
+                    document.getElementById('cameraContainer').classList.add('active');
+                    document.getElementById('controlsPanel').style.display = 'block';
+                    errorContainer.innerHTML = '';
+                };
+
+            } catch (error) {
+                console.error('Camera error:', error);
+                
+                let errorMessage = 'Neizdevās piekļūt kamerai. ';
+                
+                if (error.name === 'NotAllowedError') {
+                    errorMessage += 'Lūdzu, atļauj kameras piekļuvi pārlūkprogrammas iestatījumos.';
+                } else if (error.name === 'NotFoundError') {
+                    errorMessage += 'Kamera netika atrasta.';
+                } else if (error.name === 'NotReadableError') {
+                    errorMessage += 'Kamera jau tiek izmantota citā aplikācijā.';
+                } else {
+                    errorMessage += 'Pārliecinies, ka esi piešķīris atļauju kameras lietošanai.';
+                }
+                
+                showError(errorMessage);
+            }
+        }
+
+        // Opacity control
+        document.getElementById('opacitySlider').addEventListener('input', function(e) {
+            const opacity = e.target.value / 100;
+            document.getElementById('historical-overlay').style.opacity = opacity;
+            document.getElementById('opacityValue').textContent = e.target.value + '%';
+        });
+
+        // Zoom control
+        document.getElementById('zoomSlider').addEventListener('input', function(e) {
+            currentZoom = e.target.value / 100;
+            const video = document.getElementById('video-feed');
+            video.style.transform = `scale(${currentZoom})`;
+            document.getElementById('zoomValue').textContent = currentZoom.toFixed(1) + 'x';
+        });
+
+        // Capture photo
+        function capturePhoto() {
+            const video = document.getElementById('video-feed');
+            const canvas = document.getElementById('snapshot-canvas');
+
+            // Set canvas size to match video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+
+            // Apply zoom transform
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.scale(currentZoom, currentZoom);
+            ctx.translate(-canvas.width / 2, -canvas.height / 2);
+            
+            // Draw video frame
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            ctx.restore();
+
+            // Store captured image
+            capturedImageData = canvas.toDataURL('image/jpeg', 0.95);
+            document.getElementById('captured-image').src = capturedImageData;
+
+            // Show compare and save buttons
+            document.getElementById('compareBtn').style.display = 'inline-block';
+            document.getElementById('saveBtn').style.display = 'inline-block';
+            document.getElementById('captureBtn').textContent = '📷 Uzņemt vēlreiz';
+
+            // Haptic feedback if available
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+
+            alert('✅ Foto uzņemts! Tagad vari salīdzināt vai saglabāt rezultātu.');
+        }
+
+        // Toggle comparison view
+        function toggleComparison() {
+            const sliderComp = document.getElementById('sliderComparison');
+            const video = document.getElementById('video-feed');
+            const overlay = document.getElementById('historical-overlay');
+            const sliderControlGroup = document.getElementById('sliderControlGroup');
+            const compareBtn = document.getElementById('compareBtn');
+
+            if (sliderComp.classList.contains('active')) {
+                sliderComp.classList.remove('active');
+                video.style.display = 'block';
+                overlay.style.display = 'block';
+                sliderControlGroup.style.display = 'none';
+                compareBtn.textContent = '🔄 Salīdzināt';
+            } else {
+                if (!capturedImageData) {
+                    alert('⚠️ Vispirms uzņem foto!');
+                    return;
+                }
+                sliderComp.classList.add('active');
+                video.style.display = 'none';
+                overlay.style.display = 'none';
+                sliderControlGroup.style.display = 'block';
+                compareBtn.textContent = '📹 Atpakaļ uz kameru';
+                updateSliderComparison(50);
+            }
+        }
+
+        // Comparison slider
+        document.getElementById('comparisonSlider').addEventListener('input', function(e) {
+            updateSliderComparison(e.target.value);
+        });
+
+        function updateSliderComparison(value) {
+            const divider = document.getElementById('sliderDivider');
+            const historicalImg = document.getElementById('historical-comparison');
+            
+            divider.style.left = value + '%';
+            historicalImg.style.clipPath = `inset(0 ${100 - value}% 0 0)`;
+        }
+
+        // Save comparison
+        function saveComparison() {
+            if (!capturedImageData) {
+                alert('⚠️ Vispirms uzņem foto!');
+                return;
+            }
+
+            const canvas = document.getElementById('snapshot-canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Create comparison image
+            const img1 = new Image();
+            const img2 = new Image();
+            
+            img1.onload = function() {
+                img2.onload = function() {
+                    // Set canvas to accommodate both images side by side
+                    const maxWidth = Math.max(img1.width, img2.width);
+                    const maxHeight = Math.max(img1.height, img2.height);
+                    
+                    canvas.width = maxWidth * 2;
+                    canvas.height = maxHeight;
+
+                    // Fill background
+                    ctx.fillStyle = '#000';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    // Draw historical on left (centered)
+                    const x1 = (maxWidth - img1.width) / 2;
+                    const y1 = (maxHeight - img1.height) / 2;
+                    ctx.drawImage(img1, x1, y1, img1.width, img1.height);
+                    
+                    // Draw captured on right (centered)
+                    const x2 = maxWidth + (maxWidth - img2.width) / 2;
+                    const y2 = (maxHeight - img2.height) / 2;
+                    ctx.drawImage(img2, x2, y2, img2.width, img2.height);
+
+                    // Add dividing line
+                    ctx.strokeStyle = '#d4af37';
+                    ctx.lineWidth = 6;
+                    ctx.beginPath();
+                    ctx.moveTo(maxWidth, 0);
+                    ctx.lineTo(maxWidth, maxHeight);
+                    ctx.stroke();
+
+                    // Add labels with better positioning
+                    const fontSize = Math.max(32, maxHeight / 20);
+                    ctx.font = `bold ${fontSize}px Oswald`;
+                    ctx.fillStyle = '#d4af37';
+                    ctx.strokeStyle = '#000';
+                    ctx.lineWidth = 4;
+                    
+                    const padding = 30;
+                    ctx.strokeText('TAD', padding, fontSize + padding);
+                    ctx.fillText('TAD', padding, fontSize + padding);
+                    
+                    ctx.strokeText('TAGAD', maxWidth + padding, fontSize + padding);
+                    ctx.fillText('TAGAD', maxWidth + padding, fontSize + padding);
+
+                    // Download
+                    const link = document.getElementById('download-link');
+                    link.href = canvas.toDataURL('image/jpeg', 0.95);
+                    link.click();
+
+                    // Haptic feedback
+                    if (navigator.vibrate) {
+                        navigator.vibrate([50, 100, 50]);
+                    }
+
+                    alert('✅ Salīdzinājums saglabāts!');
+                };
+                img2.src = capturedImageData;
+            };
+            img1.src = historicalImage;
+        }
+
+        // Reset app
+        function resetApp() {
+            if (confirm('Vai tiešām vēlies sākt no jauna?')) {
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+                
+                document.getElementById('uploadSection').classList.remove('active');
+                document.getElementById('cameraContainer').classList.remove('active');
+                document.getElementById('controlsPanel').style.display = 'none';
+                document.getElementById('compareBtn').style.display = 'none';
+                document.getElementById('saveBtn').style.display = 'none';
+                document.getElementById('sliderComparison').classList.remove('active');
+                document.getElementById('captureBtn').textContent = '📷 Uzņemt foto';
+                document.getElementById('errorContainer').innerHTML = '';
+                
+                historicalImage = null;
+                capturedImageData = null;
+                currentZoom = 1;
+                
+                document.getElementById('opacitySlider').value = 50;
+                document.getElementById('zoomSlider').value = 100;
+                document.getElementById('historicalInput').value = '';
+                document.getElementById('video-feed').style.transform = 'scale(1)';
+            }
+        }
+
+        // Prevent pull-to-refresh on mobile
+        document.body.addEventListener('touchmove', function(e) {
+            if (e.target.closest('.camera-container')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>
