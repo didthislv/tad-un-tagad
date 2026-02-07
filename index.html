@@ -118,7 +118,6 @@
             display: none;
         }
 
-        /* Pelēka vienkrāsaina ikona */
         .upload-icon {
             font-size: 4rem;
             margin-bottom: 20px;
@@ -299,15 +298,6 @@
             display: block;
         }
 
-        .comparison-slider {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 40px);
-            z-index: 10;
-        }
-
         #captured-image {
             position: absolute;
             top: 0;
@@ -359,19 +349,6 @@
             cursor: pointer;
             border: 4px solid white;
             box-shadow: 0 0 25px rgba(150, 150, 150, 0.8);
-        }
-
-        .slider-divider {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(180deg, var(--gold), var(--accent));
-            transform: translateX(-50%);
-            box-shadow: 0 0 20px rgba(233, 69, 96, 0.6);
-            pointer-events: none;
-            z-index: 5;
         }
 
         #historical-comparison {
@@ -432,7 +409,7 @@
             color: var(--accent);
         }
 
-        /* Footer / Versijas informācija */
+        /* Footer */
         .app-footer {
             text-align: center;
             padding: 8px 10px;
@@ -441,11 +418,39 @@
             font-size: 0.7rem;
             letter-spacing: 0.1em;
             color: #555;
-            text-transform: uppercase;
         }
 
         .app-footer.camera-active {
             padding: 4px 10px;
+        }
+
+        /* Slīdņa norāde */
+        .slider-hint {
+            display: none;
+            text-align: center;
+            margin-top: 6px;
+            font-family: 'Lora', serif;
+            font-size: 0.7rem;
+            color: #666;
+            letter-spacing: 0.03em;
+            animation: hintPulse 2s ease-in-out infinite;
+        }
+
+        .slider-hint.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .slider-hint i {
+            font-size: 0.65rem;
+            color: #888;
+        }
+
+        @keyframes hintPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
 
         @media (max-width: 768px) {
@@ -518,7 +523,6 @@
         </header>
 
         <div class="upload-section" id="uploadSection" onclick="document.getElementById('historicalInput').click()">
-            <!-- Pelēka SVG ikona emoji vietā -->
             <div class="upload-icon">
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                     <rect x="15" y="25" width="70" height="55" rx="8" ry="8" fill="none" stroke="#888" stroke-width="3"/>
@@ -527,7 +531,6 @@
                     <circle cx="50" cy="52" r="3" fill="#777"/>
                     <rect x="38" y="20" width="24" height="10" rx="3" ry="3" fill="none" stroke="#888" stroke-width="2.5"/>
                     <circle cx="72" cy="35" r="3" fill="#666"/>
-                    <!-- Laika ikona — pulkstenis -->
                     <circle cx="78" cy="68" r="10" fill="#222" stroke="#888" stroke-width="2"/>
                     <line x1="78" y1="68" x2="78" y2="62" stroke="#aaa" stroke-width="1.5" stroke-linecap="round"/>
                     <line x1="78" y1="68" x2="83" y2="68" stroke="#aaa" stroke-width="1.5" stroke-linecap="round"/>
@@ -590,10 +593,14 @@
 
             <div class="control-group" id="comparisonSliderGroup" style="display: none; padding-top: 30px;">
                 <input type="range" class="comparison-slider" id="comparisonSlider" min="0" max="100" value="50">
+                <div class="slider-hint" id="sliderHint">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>velc aplīti, lai salīdzinātu</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
             </div>
         </div>
 
-        <!-- Versijas informācija apakšā -->
         <footer class="app-footer" id="appFooter">
             © DS 2025 v1
         </footer>
@@ -704,7 +711,6 @@
         function capturePhoto() {
             const video = document.getElementById('video-feed');
             const canvas = document.getElementById('snapshot-canvas');
-            const historicalImg = document.getElementById('historical-overlay');
 
             const histImg = new Image();
             histImg.src = historicalImage;
@@ -760,7 +766,6 @@
             const sliderComp = document.getElementById('sliderComparison');
             const video = document.getElementById('video-feed');
             const overlay = document.getElementById('historical-overlay');
-            const compareBtn = document.getElementById('compareBtn');
             const compareBtnText = document.getElementById('compareBtnText');
             const compareBtnIcon = document.getElementById('compareBtnIcon');
             const opacityControl = document.getElementById('opacitySlider').parentElement;
@@ -768,6 +773,7 @@
             const comparisonSliderGroup = document.getElementById('comparisonSliderGroup');
             const captureBtn = document.getElementById('captureBtn');
             const resetBtn = document.querySelector('.btn-danger');
+            const sliderHint = document.getElementById('sliderHint');
 
             if (sliderComp.classList.contains('active')) {
                 sliderComp.classList.remove('active');
@@ -781,6 +787,7 @@
                 captureBtn.style.display = 'inline-flex';
                 resetBtn.style.display = 'inline-flex';
                 comparisonSliderGroup.style.display = 'none';
+                sliderHint.classList.remove('active');
             } else {
                 if (!capturedImageData) {
                     alert('⚠️ Vispirms uzņem foto!');
@@ -797,6 +804,7 @@
                 captureBtn.style.display = 'none';
                 resetBtn.style.display = 'none';
                 comparisonSliderGroup.style.display = 'block';
+                sliderHint.classList.add('active');
                 
                 updateSliderComparison(50);
             }
@@ -812,7 +820,6 @@
             const capturedImg = document.getElementById('captured-image');
             
             divider.style.left = value + '%';
-            
             historicalImg.style.clipPath = `inset(0 ${100 - value}% 0 0)`;
             capturedImg.style.clipPath = `inset(0 0 0 ${value}%)`;
         }
@@ -898,6 +905,7 @@
                 document.getElementById('captureBtn').style.display = 'inline-flex';
                 document.getElementById('errorContainer').innerHTML = '';
                 document.getElementById('appFooter').classList.remove('camera-active');
+                document.getElementById('sliderHint').classList.remove('active');
                 
                 historicalImage = null;
                 capturedImageData = null;
