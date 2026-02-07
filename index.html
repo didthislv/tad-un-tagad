@@ -311,6 +311,55 @@
             z-index: 5;
         }
 
+        .comparison-slider {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            z-index: 10;
+            height: 6px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .comparison-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--accent));
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.8);
+            border: 3px solid white;
+        }
+
+        .comparison-slider::-moz-range-thumb {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--accent));
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.8);
+        }
+
+        .slider-divider {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--gold), var(--accent));
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.6);
+            pointer-events: none;
+            z-index: 5;
+        }
+
         #historical-comparison {
             position: absolute;
             top: 0;
@@ -456,6 +505,7 @@
                 <img id="historical-comparison" alt="Vēsturiskais attēls">
                 <img id="captured-image" alt="Uzņemtais attēls">
                 <div class="slider-divider" id="sliderDivider"></div>
+                <input type="range" class="comparison-slider" id="comparisonSlider" min="0" max="100" value="50">
             </div>
         </div>
 
@@ -474,11 +524,6 @@
                     <span class="control-value" id="zoomValue">1.0x</span>
                 </div>
                 <input type="range" id="zoomSlider" min="100" max="300" value="100">
-            <div class="control-group" id="comparisonSliderControl" style="display: none;">
-                <div class="control-label">
-                    <span>Salīdzinājuma slīdnis</span>
-                </div>
-                <input type="range" id="comparisonSlider" min="0" max="100" value="50">
             </div>
 
             <div class="action-buttons">
@@ -674,7 +719,6 @@
             const compareBtn = document.getElementById('compareBtn');
             const opacityControl = document.getElementById('opacitySlider').parentElement;
             const zoomControl = document.getElementById('zoomSlider').parentElement;
-            const sliderControl = document.getElementById('comparisonSliderControl');
 
             if (sliderComp.classList.contains('active')) {
                 // Back to camera mode
@@ -683,10 +727,9 @@
                 overlay.style.display = 'block';
                 compareBtn.textContent = '🔄 Salīdzināt';
                 
-                // Show opacity and zoom, hide comparison slider
+                // Show opacity and zoom
                 opacityControl.style.display = 'block';
                 zoomControl.style.display = 'block';
-                sliderControl.style.display = 'none';
             } else {
                 // Comparison mode
                 if (!capturedImageData) {
@@ -698,10 +741,9 @@
                 overlay.style.display = 'none';
                 compareBtn.textContent = '📹 Atpakaļ uz kameru';
                 
-                // Hide opacity and zoom, show comparison slider
+                // Hide opacity and zoom
                 opacityControl.style.display = 'none';
                 zoomControl.style.display = 'none';
-                sliderControl.style.display = 'block';
                 
                 updateSliderComparison(50);
             }
