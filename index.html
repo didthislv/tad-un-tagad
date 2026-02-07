@@ -118,10 +118,20 @@
             display: none;
         }
 
+        /* Pelēka vienkrāsaina ikona */
         .upload-icon {
             font-size: 4rem;
             margin-bottom: 20px;
             animation: float 3s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-icon svg {
+            width: 80px;
+            height: 80px;
+            filter: drop-shadow(0 0 10px rgba(150, 150, 150, 0.3));
         }
 
         @keyframes float {
@@ -422,6 +432,22 @@
             color: var(--accent);
         }
 
+        /* Footer / Versijas informācija */
+        .app-footer {
+            text-align: center;
+            padding: 8px 10px;
+            flex-shrink: 0;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            color: #555;
+            text-transform: uppercase;
+        }
+
+        .app-footer.camera-active {
+            padding: 4px 10px;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -492,7 +518,21 @@
         </header>
 
         <div class="upload-section" id="uploadSection" onclick="document.getElementById('historicalInput').click()">
-            <div class="upload-icon">📸</div>
+            <!-- Pelēka SVG ikona emoji vietā -->
+            <div class="upload-icon">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="15" y="25" width="70" height="55" rx="8" ry="8" fill="none" stroke="#888" stroke-width="3"/>
+                    <circle cx="50" cy="52" r="16" fill="none" stroke="#888" stroke-width="3"/>
+                    <circle cx="50" cy="52" r="9" fill="none" stroke="#666" stroke-width="2"/>
+                    <circle cx="50" cy="52" r="3" fill="#777"/>
+                    <rect x="38" y="20" width="24" height="10" rx="3" ry="3" fill="none" stroke="#888" stroke-width="2.5"/>
+                    <circle cx="72" cy="35" r="3" fill="#666"/>
+                    <!-- Laika ikona — pulkstenis -->
+                    <circle cx="78" cy="68" r="10" fill="#222" stroke="#888" stroke-width="2"/>
+                    <line x1="78" y1="68" x2="78" y2="62" stroke="#aaa" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="78" y1="68" x2="83" y2="68" stroke="#aaa" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
             <h2>Augšupielādē vēsturisko attēlu</h2>
             <p style="margin-top: 15px; opacity: 0.8;">Noklikšķini šeit, lai izvēlētos attēlu</p>
             <input type="file" id="historicalInput" accept="image/*">
@@ -552,6 +592,11 @@
                 <input type="range" class="comparison-slider" id="comparisonSlider" min="0" max="100" value="50">
             </div>
         </div>
+
+        <!-- Versijas informācija apakšā -->
+        <footer class="app-footer" id="appFooter">
+            © DS 2025 v1
+        </footer>
     </div>
 
     <a id="download-link" download="tad-un-tagad-salīdzinājums.jpg"></a>
@@ -562,7 +607,6 @@
         let capturedImageData = null;
         let currentZoom = 1;
 
-        // Check if we're on HTTPS or localhost
         function checkSecureContext() {
             if (!window.isSecureContext) {
                 showError('Drošības iemeslu dēļ kamera darbojas tikai ar HTTPS savienojumu. Lūdzu, izmanto šo aplikāciju caur HTTPS vai localhost.');
@@ -581,7 +625,6 @@
             `;
         }
 
-        // Upload historical image
         document.getElementById('historicalInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -600,13 +643,11 @@
             }
         });
 
-        // Start camera with better error handling
         async function startCamera() {
             const errorContainer = document.getElementById('errorContainer');
             errorContainer.innerHTML = '<div class="loading">Kameras aktivizēšana</div>';
 
             try {
-                // Try to get back camera first (better for comparison photos)
                 const constraints = {
                     video: {
                         facingMode: { ideal: 'environment' },
@@ -620,11 +661,11 @@
                 const video = document.getElementById('video-feed');
                 video.srcObject = stream;
                 
-                // Wait for video to be ready
                 video.onloadedmetadata = () => {
                     video.play();
                     document.getElementById('cameraContainer').classList.add('active');
                     document.getElementById('controlsPanel').style.display = 'block';
+                    document.getElementById('appFooter').classList.add('camera-active');
                     errorContainer.innerHTML = '';
                 };
 
@@ -647,14 +688,12 @@
             }
         }
 
-        // Opacity control
         document.getElementById('opacitySlider').addEventListener('input', function(e) {
             const opacity = e.target.value / 100;
             document.getElementById('historical-overlay').style.opacity = opacity;
             document.getElementById('opacityValue').textContent = e.target.value + '%';
         });
 
-        // Zoom control
         document.getElementById('zoomSlider').addEventListener('input', function(e) {
             currentZoom = e.target.value / 100;
             const video = document.getElementById('video-feed');
@@ -662,65 +701,53 @@
             document.getElementById('zoomValue').textContent = currentZoom.toFixed(1) + 'x';
         });
 
-        // Capture photo
         function capturePhoto() {
             const video = document.getElementById('video-feed');
             const canvas = document.getElementById('snapshot-canvas');
             const historicalImg = document.getElementById('historical-overlay');
 
-            // Get historical image dimensions
             const histImg = new Image();
             histImg.src = historicalImage;
             
-            // Wait for image to load to get real dimensions
             histImg.onload = function() {
                 const targetWidth = histImg.naturalWidth;
                 const targetHeight = histImg.naturalHeight;
                 const targetAspect = targetWidth / targetHeight;
                 
-                // Set canvas to match historical image size
                 canvas.width = targetWidth;
                 canvas.height = targetHeight;
                 
                 const ctx = canvas.getContext('2d');
                 
-                // Calculate crop dimensions to match aspect ratio
                 const videoAspect = video.videoWidth / video.videoHeight;
                 let sx, sy, sw, sh;
                 
                 if (videoAspect > targetAspect) {
-                    // Video is wider - crop sides
                     sh = video.videoHeight;
                     sw = sh * targetAspect;
                     sx = (video.videoWidth - sw) / 2;
                     sy = 0;
                 } else {
-                    // Video is taller - crop top/bottom
                     sw = video.videoWidth;
                     sh = sw / targetAspect;
                     sx = 0;
                     sy = (video.videoHeight - sh) / 2;
                 }
                 
-                // Apply zoom transform
                 ctx.save();
                 ctx.translate(canvas.width / 2, canvas.height / 2);
                 ctx.scale(currentZoom, currentZoom);
                 ctx.translate(-canvas.width / 2, -canvas.height / 2);
                 
-                // Draw cropped and scaled video frame
                 ctx.drawImage(video, sx, sy, sw, sh, 0, 0, targetWidth, targetHeight);
                 ctx.restore();
 
-                // Store captured image
                 capturedImageData = canvas.toDataURL('image/jpeg', 0.95);
                 document.getElementById('captured-image').src = capturedImageData;
 
-                // Show compare and save buttons
                 document.getElementById('compareBtn').style.display = 'inline-flex';
                 document.getElementById('saveBtn').style.display = 'inline-flex';
 
-                // Haptic feedback if available
                 if (navigator.vibrate) {
                     navigator.vibrate(50);
                 }
@@ -729,7 +756,6 @@
             };
         }
 
-        // Toggle comparison view
         function toggleComparison() {
             const sliderComp = document.getElementById('sliderComparison');
             const video = document.getElementById('video-feed');
@@ -744,21 +770,18 @@
             const resetBtn = document.querySelector('.btn-danger');
 
             if (sliderComp.classList.contains('active')) {
-                // Back to camera mode
                 sliderComp.classList.remove('active');
                 video.style.display = 'block';
                 overlay.style.display = 'block';
                 compareBtnText.textContent = 'Salīdzināt';
                 compareBtnIcon.className = 'fa-solid fa-repeat';
                 
-                // Show opacity, zoom, capture and reset buttons
                 opacityControl.style.display = 'block';
                 zoomControl.style.display = 'block';
                 captureBtn.style.display = 'inline-flex';
                 resetBtn.style.display = 'inline-flex';
                 comparisonSliderGroup.style.display = 'none';
             } else {
-                // Comparison mode
                 if (!capturedImageData) {
                     alert('⚠️ Vispirms uzņem foto!');
                     return;
@@ -769,7 +792,6 @@
                 compareBtnText.textContent = 'Atpakaļ uz kameru';
                 compareBtnIcon.className = 'fa-solid fa-video';
                 
-                // Hide opacity, zoom, capture and reset buttons, show comparison slider
                 opacityControl.style.display = 'none';
                 zoomControl.style.display = 'none';
                 captureBtn.style.display = 'none';
@@ -780,7 +802,6 @@
             }
         }
 
-        // Comparison slider
         document.getElementById('comparisonSlider').addEventListener('input', function(e) {
             updateSliderComparison(e.target.value);
         });
@@ -792,14 +813,10 @@
             
             divider.style.left = value + '%';
             
-            // Historical image shows on left side
             historicalImg.style.clipPath = `inset(0 ${100 - value}% 0 0)`;
-            
-            // Captured image shows on right side
             capturedImg.style.clipPath = `inset(0 0 0 ${value}%)`;
         }
 
-        // Save comparison
         function saveComparison() {
             if (!capturedImageData) {
                 alert('⚠️ Vispirms uzņem foto!');
@@ -809,34 +826,28 @@
             const canvas = document.getElementById('snapshot-canvas');
             const ctx = canvas.getContext('2d');
 
-            // Create comparison image
             const img1 = new Image();
             const img2 = new Image();
             
             img1.onload = function() {
                 img2.onload = function() {
-                    // Set canvas to accommodate both images side by side
                     const maxWidth = Math.max(img1.width, img2.width);
                     const maxHeight = Math.max(img1.height, img2.height);
                     
                     canvas.width = maxWidth * 2;
                     canvas.height = maxHeight;
 
-                    // Fill background
                     ctx.fillStyle = '#000';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                    // Draw historical on left (centered)
                     const x1 = (maxWidth - img1.width) / 2;
                     const y1 = (maxHeight - img1.height) / 2;
                     ctx.drawImage(img1, x1, y1, img1.width, img1.height);
                     
-                    // Draw captured on right (centered)
                     const x2 = maxWidth + (maxWidth - img2.width) / 2;
                     const y2 = (maxHeight - img2.height) / 2;
                     ctx.drawImage(img2, x2, y2, img2.width, img2.height);
 
-                    // Add dividing line
                     ctx.strokeStyle = '#d4af37';
                     ctx.lineWidth = 6;
                     ctx.beginPath();
@@ -844,7 +855,6 @@
                     ctx.lineTo(maxWidth, maxHeight);
                     ctx.stroke();
 
-                    // Add labels with better positioning
                     const fontSize = Math.max(32, maxHeight / 20);
                     ctx.font = `bold ${fontSize}px Oswald`;
                     ctx.fillStyle = '#d4af37';
@@ -858,12 +868,10 @@
                     ctx.strokeText('TAGAD', maxWidth + padding, fontSize + padding);
                     ctx.fillText('TAGAD', maxWidth + padding, fontSize + padding);
 
-                    // Download
                     const link = document.getElementById('download-link');
                     link.href = canvas.toDataURL('image/jpeg', 0.95);
                     link.click();
 
-                    // Haptic feedback
                     if (navigator.vibrate) {
                         navigator.vibrate([50, 100, 50]);
                     }
@@ -875,7 +883,6 @@
             img1.src = historicalImage;
         }
 
-        // Reset app
         function resetApp() {
             if (confirm('Vai tiešām vēlies sākt no jauna?')) {
                 if (stream) {
@@ -890,6 +897,7 @@
                 document.getElementById('sliderComparison').classList.remove('active');
                 document.getElementById('captureBtn').style.display = 'inline-flex';
                 document.getElementById('errorContainer').innerHTML = '';
+                document.getElementById('appFooter').classList.remove('camera-active');
                 
                 historicalImage = null;
                 capturedImageData = null;
@@ -902,7 +910,6 @@
             }
         }
 
-        // Prevent pull-to-refresh on mobile
         document.body.addEventListener('touchmove', function(e) {
             if (e.target.closest('.camera-container')) {
                 e.preventDefault();
