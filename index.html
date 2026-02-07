@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="lv" data-theme="dark">
+<html lang="lv" data-theme="dark" data-lang="lv">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -206,13 +206,11 @@
             letter-spacing: 0.05em;
         }
 
-        /* Theme toggle */
-        .theme-toggle {
+        /* Toggle base style */
+        .header-toggle {
             position: absolute;
-            right: 16px;
             top: 50%;
             transform: translateY(-50%);
-            width: 40px;
             height: 22px;
             border-radius: 50px;
             background: var(--glass);
@@ -225,11 +223,11 @@
             touch-action: manipulation;
         }
 
-        .theme-toggle:active {
+        .header-toggle:active {
             transform: translateY(-50%) scale(0.92);
         }
 
-        .theme-toggle-knob {
+        .toggle-knob {
             width: 16px;
             height: 16px;
             border-radius: 50%;
@@ -241,12 +239,72 @@
             box-shadow: 0 2px 8px var(--accent-glow);
         }
 
-        .theme-toggle-knob i {
+        .toggle-knob i {
             font-size: 8px;
             color: white;
         }
 
-        [data-theme="light"] .theme-toggle-knob {
+        /* Language toggle — left */
+        .lang-toggle {
+            left: 16px;
+            width: 48px;
+        }
+
+        .lang-toggle .toggle-knob {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 7px;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+        }
+
+        .lang-toggle .toggle-knob i {
+            display: none;
+        }
+
+        [data-lang="en"] .lang-toggle .toggle-knob {
+            transform: translateX(26px);
+        }
+
+        [data-theme="light"] .lang-toggle {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        .lang-label {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 6.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+            pointer-events: none;
+            letter-spacing: 0.02em;
+            transition: opacity 0.3s ease;
+        }
+
+        .lang-label.left {
+            left: 6px;
+        }
+
+        .lang-label.right {
+            right: 6px;
+        }
+
+        [data-lang="lv"] .lang-label.left {
+            opacity: 0;
+        }
+
+        [data-lang="en"] .lang-label.right {
+            opacity: 0;
+        }
+
+        /* Theme toggle — right */
+        .theme-toggle {
+            right: 16px;
+            width: 40px;
+        }
+
+        [data-theme="light"] .theme-toggle .toggle-knob {
             transform: translateX(18px);
         }
 
@@ -434,7 +492,6 @@
             transition: opacity 0.3s ease;
         }
 
-        /* Viewfinder */
         .viewfinder {
             position: absolute;
             inset: 12px;
@@ -455,7 +512,6 @@
         .vf-corner.bl { bottom:0; left:0; border-bottom-width:2px; border-left-width:2px; border-radius:0 0 0 3px; }
         .vf-corner.br { bottom:0; right:0; border-bottom-width:2px; border-right-width:2px; border-radius:0 0 3px 0; }
 
-        /* Status pill */
         .status-pill {
             display: none;
             position: absolute;
@@ -499,7 +555,6 @@
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
 
-        /* Controls */
         .controls-panel {
             background: var(--bg-secondary);
             border-top: 1px solid var(--border);
@@ -508,10 +563,7 @@
             transition: background 0.4s ease;
         }
 
-        .control-group {
-            margin-bottom: 6px;
-        }
-
+        .control-group { margin-bottom: 6px; }
         .control-group:last-child { margin-bottom: 0; }
 
         .control-header {
@@ -528,9 +580,7 @@
             color: var(--text-secondary);
         }
 
-        .control-label i {
-            margin-right: 5px;
-        }
+        .control-label i { margin-right: 5px; }
 
         .control-value {
             font-family: 'Space Grotesk', sans-serif;
@@ -543,8 +593,7 @@
         }
 
         input[type="range"] {
-            width: 100%;
-            height: 3px;
+            width: 100%; height: 3px;
             border-radius: 3px;
             background: var(--slider-track);
             outline: none;
@@ -561,9 +610,7 @@
             border: 2px solid var(--thumb-border);
         }
 
-        input[type="range"]::-webkit-slider-thumb:active {
-            transform: scale(1.3);
-        }
+        input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.3); }
 
         input[type="range"]::-moz-range-thumb {
             width: 16px; height: 16px;
@@ -573,7 +620,6 @@
             border: 2px solid var(--thumb-border);
         }
 
-        /* Comparison */
         .slider-comparison {
             position: absolute;
             top: 0; left: 0;
@@ -586,27 +632,20 @@
 
         .slider-comparison.active { display: block; }
 
-        #captured-image,
-        #historical-comparison {
+        #captured-image, #historical-comparison {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
             object-fit: contain;
         }
 
-        #historical-comparison {
-            clip-path: inset(0 50% 0 0);
-            z-index: 2;
-        }
-
+        #historical-comparison { clip-path: inset(0 50% 0 0); z-index: 2; }
         #captured-image { z-index: 1; }
 
         .slider-divider {
             position: absolute;
-            top: 0;
-            left: 50%;
-            width: 2px;
-            height: 100%;
+            top: 0; left: 50%;
+            width: 2px; height: 100%;
             background: linear-gradient(180deg, var(--accent-1), var(--accent-2), var(--accent-3));
             transform: translateX(-50%);
             box-shadow: 0 0 12px var(--accent-glow);
@@ -648,10 +687,8 @@
             border: 1px solid var(--comp-now-bg);
         }
 
-        /* Comparison slider */
         .comparison-slider {
-            width: 100%;
-            height: 6px;
+            width: 100%; height: 6px;
             border-radius: 6px;
             background: var(--slider-track);
             outline: none;
@@ -683,7 +720,6 @@
             flex-wrap: wrap;
         }
 
-        /* Slider hint */
         .slider-hint {
             display: none;
             text-align: center;
@@ -701,17 +737,13 @@
             gap: 8px;
         }
 
-        .slider-hint i {
-            font-size: 0.55rem;
-            color: var(--accent-2);
-        }
+        .slider-hint i { font-size: 0.55rem; color: var(--accent-2); }
 
         @keyframes hintPulse {
             0%, 100% { opacity: 0.4; }
             50% { opacity: 1; }
         }
 
-        /* Footer */
         .app-footer {
             text-align: center;
             padding: 4px 10px;
@@ -723,11 +755,9 @@
             transition: color 0.4s ease;
         }
 
-        /* Toast */
         .toast {
             position: fixed;
-            top: 16px;
-            left: 50%;
+            top: 16px; left: 50%;
             transform: translateX(-50%) translateY(-100px);
             padding: 10px 20px;
             border-radius: 50px;
@@ -759,7 +789,6 @@
 
         .toast i { font-size: 0.9rem; }
 
-        /* Error */
         .error-message {
             background: var(--error-bg);
             border: 1px solid var(--error-border);
@@ -781,7 +810,6 @@
             color: var(--text-secondary);
         }
 
-        /* Loading */
         .loading {
             text-align: center;
             padding: 16px;
@@ -818,13 +846,8 @@
         #download-link { display: none; }
 
         @media (max-width: 768px) {
-            .action-buttons {
-                flex-direction: column;
-            }
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
+            .action-buttons { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
         }
 
         .camera-container, .controls-panel {
@@ -847,17 +870,26 @@
     
     <div class="container">
         <header>
+            <!-- Valodas pārslēdzējs — kreisajā pusē -->
+            <div class="header-toggle lang-toggle" id="langToggle" onclick="toggleLang()">
+                <span class="lang-label left">LV</span>
+                <div class="toggle-knob" id="langKnob">LV</div>
+                <span class="lang-label right">EN</span>
+            </div>
+
             <div class="header-content">
                 <div class="logo-row">
                     <div class="logo-icon">
                         <i class="fa-solid fa-clock-rotate-left"></i>
                     </div>
-                    <h1>Tad un Tagad</h1>
+                    <h1 data-lv="Tad un Tagad" data-en="Then and Now">Tad un Tagad</h1>
                 </div>
-                <p class="subtitle">Salīdzini vēsturi ar tagadni</p>
+                <p class="subtitle" data-lv="Salīdzini vēsturi ar tagadni" data-en="Compare history with the present">Salīdzini vēsturi ar tagadni</p>
             </div>
-            <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
-                <div class="theme-toggle-knob">
+
+            <!-- Tēmas pārslēdzējs — labajā pusē -->
+            <div class="header-toggle theme-toggle" id="themeToggle" onclick="toggleTheme()">
+                <div class="toggle-knob">
                     <i class="fa-solid fa-moon" id="themeIcon"></i>
                 </div>
             </div>
@@ -877,10 +909,10 @@
                     <line x1="78" y1="68" x2="83" y2="68" stroke="rgba(236,72,153,0.7)" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
             </div>
-            <h2>Augšupielādē vēsturisko attēlu</h2>
+            <h2 data-lv="Augšupielādē vēsturisko attēlu" data-en="Upload historical photo">Augšupielādē vēsturisko attēlu</h2>
             <p class="upload-hint">
                 <i class="fa-solid fa-hand-pointer"></i>
-                Noklikšķini šeit, lai izvēlētos attēlu
+                <span data-lv="Noklikšķini šeit, lai izvēlētos attēlu" data-en="Tap here to choose a photo">Noklikšķini šeit, lai izvēlētos attēlu</span>
             </p>
             <input type="file" id="historicalInput" accept="image/*">
         </div>
@@ -900,7 +932,7 @@
             </div>
 
             <div class="status-pill" id="statusPill">
-                <span class="dot"></span>Kamera aktīva
+                <span class="dot"></span><span data-lv="Kamera aktīva" data-en="Camera active">Kamera aktīva</span>
             </div>
             
             <div class="slider-comparison" id="sliderComparison">
@@ -908,8 +940,8 @@
                 <img id="historical-comparison" alt="Vēsturiskais attēls">
                 <div class="slider-divider" id="sliderDivider"></div>
                 <div class="comparison-labels">
-                    <span class="comp-label then">Tad</span>
-                    <span class="comp-label now">Tagad</span>
+                    <span class="comp-label then" data-lv="Tad" data-en="Then">Tad</span>
+                    <span class="comp-label now" data-lv="Tagad" data-en="Now">Tagad</span>
                 </div>
             </div>
         </div>
@@ -917,7 +949,7 @@
         <div class="controls-panel" id="controlsPanel" style="display: none;">
             <div class="control-group" id="opacityGroup">
                 <div class="control-header">
-                    <span class="control-label"><i class="fa-solid fa-eye" style="color: var(--accent-1);"></i>Caurspīdīgums</span>
+                    <span class="control-label"><i class="fa-solid fa-eye" style="color: var(--accent-1);"></i><span data-lv="Caurspīdīgums" data-en="Opacity">Caurspīdīgums</span></span>
                     <span class="control-value" id="opacityValue">50%</span>
                 </div>
                 <input type="range" id="opacitySlider" min="0" max="100" value="50">
@@ -925,7 +957,7 @@
 
             <div class="control-group" id="zoomGroup">
                 <div class="control-header">
-                    <span class="control-label"><i class="fa-solid fa-magnifying-glass-plus" style="color: var(--accent-2);"></i>Tālummaiņa</span>
+                    <span class="control-label"><i class="fa-solid fa-magnifying-glass-plus" style="color: var(--accent-2);"></i><span data-lv="Tālummaiņa" data-en="Zoom">Tālummaiņa</span></span>
                     <span class="control-value" id="zoomValue">1.0x</span>
                 </div>
                 <input type="range" id="zoomSlider" min="100" max="300" value="100">
@@ -934,19 +966,19 @@
             <div class="action-buttons">
                 <button class="btn btn-primary" id="captureBtn" onclick="capturePhoto()">
                     <i class="fa-solid fa-camera"></i>
-                    Uzņemt foto
+                    <span data-lv="Uzņemt foto" data-en="Capture photo">Uzņemt foto</span>
                 </button>
                 <button class="btn btn-ghost" id="compareBtn" style="display: none;" onclick="toggleComparison()">
                     <i class="fa-solid fa-repeat" id="compareBtnIcon"></i>
-                    <span id="compareBtnText">Salīdzināt</span>
+                    <span id="compareBtnText" data-lv="Salīdzināt" data-en="Compare" data-lv-alt="Atpakaļ" data-en-alt="Back">Salīdzināt</span>
                 </button>
                 <button class="btn btn-ghost" id="saveBtn" style="display: none;" onclick="saveComparison()">
                     <i class="fa-solid fa-floppy-disk"></i>
-                    Saglabāt
+                    <span data-lv="Saglabāt" data-en="Save">Saglabāt</span>
                 </button>
                 <button class="btn btn-danger" id="resetBtn" onclick="resetApp()">
                     <i class="fa-solid fa-rotate-left"></i>
-                    Sākt no jauna
+                    <span data-lv="Sākt no jauna" data-en="Start over">Sākt no jauna</span>
                 </button>
             </div>
 
@@ -954,7 +986,7 @@
                 <input type="range" class="comparison-slider" id="comparisonSlider" min="0" max="100" value="50">
                 <div class="slider-hint" id="sliderHint">
                     <i class="fa-solid fa-arrow-left"></i>
-                    <span>velc aplīti, lai salīdzinātu</span>
+                    <span data-lv="velc aplīti, lai salīdzinātu" data-en="drag to compare">velc aplīti, lai salīdzinātu</span>
                     <i class="fa-solid fa-arrow-right"></i>
                 </div>
             </div>
@@ -970,14 +1002,83 @@
         let historicalImage = null;
         let capturedImageData = null;
         let currentZoom = 1;
+        let isComparing = false;
+
+        // ===== TULKOJUMI =====
+        const translations = {
+            toasts: {
+                cameraActive:    { lv: 'Kamera aktivizēta',         en: 'Camera activated' },
+                photoCaptured:   { lv: 'Foto uzņemts veiksmīgi!',   en: 'Photo captured successfully!' },
+                captureFirst:    { lv: 'Vispirms uzņem foto!',       en: 'Capture a photo first!' },
+                saved:           { lv: 'Salīdzinājums saglabāts!',  en: 'Comparison saved!' },
+                confirmReset:    { lv: 'Vai tiešām vēlies sākt no jauna?', en: 'Are you sure you want to start over?' },
+                httpsRequired:   { lv: 'Drošības iemeslu dēļ kamera darbojas tikai ar HTTPS savienojumu.', en: 'Camera requires a secure HTTPS connection.' },
+            },
+            errors: {
+                cameraFail:      { lv: 'Neizdevās piekļūt kamerai. ', en: 'Could not access camera. ' },
+                notAllowed:      { lv: 'Lūdzu, atļauj kameras piekļuvi iestatījumos.', en: 'Please allow camera access in settings.' },
+                notFound:        { lv: 'Kamera netika atrasta.',     en: 'Camera not found.' },
+                notReadable:     { lv: 'Kamera tiek izmantota citur.', en: 'Camera is in use by another app.' },
+                generic:         { lv: 'Pārliecinies par kameras atļauju.', en: 'Make sure camera permission is granted.' },
+                warning:         { lv: 'Brīdinājums',               en: 'Warning' },
+            },
+            loading: {
+                camera:          { lv: 'Kameras aktivizēšana',      en: 'Activating camera' },
+            },
+            save: {
+                then:            { lv: 'TAD',                        en: 'THEN' },
+                now:             { lv: 'TAGAD',                      en: 'NOW' },
+            }
+        };
+
+        function t(category, key) {
+            const lang = document.documentElement.getAttribute('data-lang') || 'lv';
+            return translations[category]?.[key]?.[lang] || '';
+        }
+
+        // ===== VALODAS PĀRSLĒGŠANA =====
+        function toggleLang() {
+            const html = document.documentElement;
+            const knob = document.getElementById('langKnob');
+            const current = html.getAttribute('data-lang');
+            const newLang = current === 'lv' ? 'en' : 'lv';
+            
+            html.setAttribute('data-lang', newLang);
+            html.setAttribute('lang', newLang);
+            knob.textContent = newLang.toUpperCase();
+            localStorage.setItem('lang', newLang);
+
+            // Atjaunot visus data-lv / data-en elementus
+            document.querySelectorAll('[data-lv][data-en]').forEach(el => {
+                // Salīdzināšanas poga — speciāls gadījums
+                if (el.id === 'compareBtnText' && isComparing) {
+                    el.textContent = el.getAttribute('data-' + newLang + '-alt') || el.getAttribute('data-' + newLang);
+                } else {
+                    el.textContent = el.getAttribute('data-' + newLang);
+                }
+            });
+        }
+
+        // Ielādēt saglabāto valodu
+        (function loadLang() {
+            const saved = localStorage.getItem('lang');
+            if (saved && saved !== 'lv') {
+                document.documentElement.setAttribute('data-lang', saved);
+                document.documentElement.setAttribute('lang', saved);
+                document.getElementById('langKnob').textContent = saved.toUpperCase();
+                document.querySelectorAll('[data-lv][data-en]').forEach(el => {
+                    el.textContent = el.getAttribute('data-' + saved);
+                });
+            }
+        })();
 
         // ===== TĒMU PĀRSLĒGŠANA =====
         function toggleTheme() {
             const html = document.documentElement;
             const icon = document.getElementById('themeIcon');
-            const currentTheme = html.getAttribute('data-theme');
+            const current = html.getAttribute('data-theme');
             
-            if (currentTheme === 'dark') {
+            if (current === 'dark') {
                 html.setAttribute('data-theme', 'light');
                 icon.className = 'fa-solid fa-sun';
                 localStorage.setItem('theme', 'light');
@@ -988,13 +1089,11 @@
             }
         }
 
-        // Ielādēt saglabāto tēmu
         (function loadTheme() {
             const saved = localStorage.getItem('theme');
             if (saved) {
                 document.documentElement.setAttribute('data-theme', saved);
-                const icon = document.getElementById('themeIcon');
-                icon.className = saved === 'light' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+                document.getElementById('themeIcon').className = saved === 'light' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
             }
         })();
 
@@ -1005,23 +1104,16 @@
             const toastText = document.getElementById('toastText');
 
             toast.className = 'toast ' + type;
-            toastIcon.className = type === 'success' 
-                ? 'fa-solid fa-circle-check' 
-                : 'fa-solid fa-triangle-exclamation';
+            toastIcon.className = type === 'success' ? 'fa-solid fa-circle-check' : 'fa-solid fa-triangle-exclamation';
             toastText.textContent = message;
 
-            requestAnimationFrame(() => {
-                toast.classList.add('show');
-            });
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            requestAnimationFrame(() => toast.classList.add('show'));
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
         function checkSecureContext() {
             if (!window.isSecureContext) {
-                showError('Drošības iemeslu dēļ kamera darbojas tikai ar HTTPS savienojumu.');
+                showError(t('toasts', 'httpsRequired'));
                 return false;
             }
             return true;
@@ -1030,7 +1122,7 @@
         function showError(message) {
             document.getElementById('errorContainer').innerHTML = `
                 <div class="error-message">
-                    <h3><i class="fa-solid fa-triangle-exclamation" style="margin-right:6px;"></i>Brīdinājums</h3>
+                    <h3><i class="fa-solid fa-triangle-exclamation" style="margin-right:6px;"></i>${t('errors', 'warning')}</h3>
                     <p>${message}</p>
                 </div>
             `;
@@ -1052,21 +1144,17 @@
         });
 
         async function startCamera() {
-            const errorContainer = document.getElementById('errorContainer');
-            errorContainer.innerHTML = `
+            const ec = document.getElementById('errorContainer');
+            ec.innerHTML = `
                 <div class="loading">
-                    Kameras aktivizēšana
+                    ${t('loading', 'camera')}
                     <div class="loading-dots"><span></span><span></span><span></span></div>
                 </div>
             `;
 
             try {
                 stream = await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        facingMode: { ideal: 'environment' },
-                        width: { ideal: 1920 },
-                        height: { ideal: 1080 }
-                    },
+                    video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } },
                     audio: false
                 });
                 
@@ -1078,16 +1166,16 @@
                     document.getElementById('cameraContainer').classList.add('active');
                     document.getElementById('controlsPanel').style.display = 'block';
                     document.getElementById('statusPill').classList.add('active');
-                    errorContainer.innerHTML = '';
-                    showToast('Kamera aktivizēta');
+                    ec.innerHTML = '';
+                    showToast(t('toasts', 'cameraActive'));
                 };
 
             } catch (error) {
-                let msg = 'Neizdevās piekļūt kamerai. ';
-                if (error.name === 'NotAllowedError') msg += 'Lūdzu, atļauj kameras piekļuvi iestatījumos.';
-                else if (error.name === 'NotFoundError') msg += 'Kamera netika atrasta.';
-                else if (error.name === 'NotReadableError') msg += 'Kamera tiek izmantota citur.';
-                else msg += 'Pārliecinies par kameras atļauju.';
+                let msg = t('errors', 'cameraFail');
+                if (error.name === 'NotAllowedError') msg += t('errors', 'notAllowed');
+                else if (error.name === 'NotFoundError') msg += t('errors', 'notFound');
+                else if (error.name === 'NotReadableError') msg += t('errors', 'notReadable');
+                else msg += t('errors', 'generic');
                 showError(msg);
             }
         }
@@ -1110,21 +1198,14 @@
             histImg.src = historicalImage;
             
             histImg.onload = function() {
-                const tw = histImg.naturalWidth, th = histImg.naturalHeight;
-                const ta = tw / th;
-                canvas.width = tw;
-                canvas.height = th;
+                const tw = histImg.naturalWidth, th = histImg.naturalHeight, ta = tw / th;
+                canvas.width = tw; canvas.height = th;
                 const ctx = canvas.getContext('2d');
                 const va = video.videoWidth / video.videoHeight;
                 let sx, sy, sw, sh;
                 
-                if (va > ta) {
-                    sh = video.videoHeight; sw = sh * ta;
-                    sx = (video.videoWidth - sw) / 2; sy = 0;
-                } else {
-                    sw = video.videoWidth; sh = sw / ta;
-                    sx = 0; sy = (video.videoHeight - sh) / 2;
-                }
+                if (va > ta) { sh = video.videoHeight; sw = sh * ta; sx = (video.videoWidth - sw) / 2; sy = 0; }
+                else { sw = video.videoWidth; sh = sw / ta; sx = 0; sy = (video.videoHeight - sh) / 2; }
                 
                 ctx.save();
                 ctx.translate(tw/2, th/2);
@@ -1139,7 +1220,7 @@
                 document.getElementById('saveBtn').style.display = 'inline-flex';
 
                 if (navigator.vibrate) navigator.vibrate(50);
-                showToast('Foto uzņemts veiksmīgi!');
+                showToast(t('toasts', 'photoCaptured'));
             };
         }
 
@@ -1157,12 +1238,14 @@
             const hint = document.getElementById('sliderHint');
             const pill = document.getElementById('statusPill');
             const vf = document.getElementById('viewfinder');
+            const lang = document.documentElement.getAttribute('data-lang');
 
             if (sc.classList.contains('active')) {
+                isComparing = false;
                 sc.classList.remove('active');
                 vid.style.display = 'block';
                 ov.style.display = 'block';
-                cText.textContent = 'Salīdzināt';
+                cText.textContent = cText.getAttribute('data-' + lang);
                 cIcon.className = 'fa-solid fa-repeat';
                 og.style.display = 'block';
                 zg.style.display = 'block';
@@ -1174,15 +1257,16 @@
                 vf.style.display = 'block';
             } else {
                 if (!capturedImageData) {
-                    showToast('Vispirms uzņem foto!', 'warning');
+                    showToast(t('toasts', 'captureFirst'), 'warning');
                     return;
                 }
+                isComparing = true;
                 document.getElementById('comparisonSlider').value = 50;
                 updateSliderComparison(50);
                 sc.classList.add('active');
                 vid.style.display = 'none';
                 ov.style.display = 'none';
-                cText.textContent = 'Atpakaļ';
+                cText.textContent = cText.getAttribute('data-' + lang + '-alt');
                 cIcon.className = 'fa-solid fa-video';
                 og.style.display = 'none';
                 zg.style.display = 'none';
@@ -1207,7 +1291,7 @@
 
         function saveComparison() {
             if (!capturedImageData) {
-                showToast('Vispirms uzņem foto!', 'warning');
+                showToast(t('toasts', 'captureFirst'), 'warning');
                 return;
             }
 
@@ -1216,8 +1300,6 @@
             const img1 = new Image();
             const img2 = new Image();
             
-            // Nolasām tēmu saglabāšanai
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
             const style = getComputedStyle(document.documentElement);
             const thenColor = style.getPropertyValue('--save-then').trim();
             const nowColor = style.getPropertyValue('--save-now').trim();
@@ -1227,12 +1309,10 @@
                 img2.onload = function() {
                     const mw = Math.max(img1.width, img2.width);
                     const mh = Math.max(img1.height, img2.height);
-                    canvas.width = mw * 2;
-                    canvas.height = mh;
+                    canvas.width = mw * 2; canvas.height = mh;
 
                     ctx.fillStyle = bgColor;
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
                     ctx.drawImage(img1, (mw-img1.width)/2, (mh-img1.height)/2);
                     ctx.drawImage(img2, mw+(mw-img2.width)/2, (mh-img2.height)/2);
 
@@ -1254,18 +1334,18 @@
                     const p = 30;
 
                     ctx.fillStyle = thenColor;
-                    ctx.strokeText('TAD', p, fs+p);
-                    ctx.fillText('TAD', p, fs+p);
+                    ctx.strokeText(t('save', 'then'), p, fs+p);
+                    ctx.fillText(t('save', 'then'), p, fs+p);
 
                     ctx.fillStyle = nowColor;
-                    ctx.strokeText('TAGAD', mw+p, fs+p);
-                    ctx.fillText('TAGAD', mw+p, fs+p);
+                    ctx.strokeText(t('save', 'now'), mw+p, fs+p);
+                    ctx.fillText(t('save', 'now'), mw+p, fs+p);
 
                     document.getElementById('download-link').href = canvas.toDataURL('image/jpeg', 0.95);
                     document.getElementById('download-link').click();
 
                     if (navigator.vibrate) navigator.vibrate([50,100,50]);
-                    showToast('Salīdzinājums saglabāts!');
+                    showToast(t('toasts', 'saved'));
                 };
                 img2.src = capturedImageData;
             };
@@ -1273,9 +1353,10 @@
         }
 
         function resetApp() {
-            if (confirm('Vai tiešām vēlies sākt no jauna?')) {
-                if (stream) stream.getTracks().forEach(t => t.stop());
+            if (confirm(t('toasts', 'confirmReset'))) {
+                if (stream) stream.getTracks().forEach(tr => tr.stop());
                 
+                isComparing = false;
                 document.getElementById('uploadSection').classList.remove('active');
                 document.getElementById('cameraContainer').classList.remove('active');
                 document.getElementById('controlsPanel').style.display = 'none';
@@ -1290,6 +1371,11 @@
                 document.getElementById('opacityGroup').style.display = 'block';
                 document.getElementById('zoomGroup').style.display = 'block';
                 document.getElementById('viewfinder').style.display = 'block';
+                
+                // Reset compare button text
+                const lang = document.documentElement.getAttribute('data-lang');
+                const cText = document.getElementById('compareBtnText');
+                cText.textContent = cText.getAttribute('data-' + lang);
                 
                 historicalImage = null;
                 capturedImageData = null;
