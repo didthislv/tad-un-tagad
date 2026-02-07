@@ -127,3 +127,7 @@ Aplikācija izmanto modernu dizainu ar:
 ### 📄 Licence
 
 Šī aplikācija ir izveidota personīgai lietošanai.
+
+---
+
+© DS 2025 v1
