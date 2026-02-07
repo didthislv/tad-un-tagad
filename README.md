@@ -8,9 +8,10 @@
 - 📹 **Reāllaika kamera** - Redzi vēsturisko attēlu pāri kameras skatam
 - 🎚️ **Caurspīdīguma kontrole** - Regulē vēsturiskā attēla pārredzamību (0-100%)
 - 🔍 **Zoom funkcija** - Tuvināšana/tālināšana (1.0x-3.0x)
-- 📷 **Foto uzņemšana** - Uzņem "tagad" attēlu
-- 🔄 **Salīdzināšanas režīms** - Slide kontrole starp vēsturisko un jauno foto
-- 💾 **Saglabāšana** - Saglabā salīdzinājumu ar abiem attēliem blakus
+- 📷 **Foto uzņemšana** - Uzņem "tagad" attēlu tādā pašā izšķirtspējā kā vēsturiskais
+- 🔄 **Salīdzināšanas režīms** - Interaktīvs slaideris starp vēsturisko un jauno foto
+- 💾 **Saglabāšana** - Saglabā salīdzinājumu ar abiem attēliem blakus (TAD | TAGAD)
+- 📳 **Haptiskā atgriezeniskā saite** - Vibrācijas apstiprinājumi mobilajās ierīcēs
 
 ## 🚀 Kā izmantot
 
@@ -26,26 +27,33 @@
 
 ## 📱 Mobilās ierīces prasības
 
-- ✅ iOS Safari 11+
+- ✅ iOS Safari 14.5+
 - ✅ Android Chrome 53+
+- ✅ Firefox, Edge, Samsung Internet
 - ✅ Atļauta kameras piekļuve
 - ✅ HTTPS savienojums (automātiski ar GitHub Pages)
 
 ## 🎨 Dizains
 
-Aplikācija izmanto unikālu retro-futuristisko dizainu ar:
-- Zelta un sarkaniem akcentiem
-- Smooth animācijām
-- Grain tekstūru vēsturiskam noskaņojumam
+Aplikācija izmanto modernu tumšo dizainu ar:
+- Violeti-rozā gradient akcentiem
+- Glassmorphism efektiem
+- Animētu gradient mesh fonu
+- Toast paziņojumiem (vietā alert logiem)
+- Kameras viewfinder stūriem
+- Statusā pill indikatoru
 - Pilnībā responsive dizainu
 
 ## 🔧 Tehnoloģijas
 
 - HTML5
-- CSS3 (Gradients, Animations, Backdrop Filter)
-- JavaScript (MediaDevices API, Canvas API)
-- Google Fonts (Oswald, Lora)
+- CSS3 (Gradients, Animations, Backdrop Filter, Glassmorphism)
+- JavaScript ES6+ (MediaDevices API, Canvas API)
+- Google Fonts (Space Grotesk, Inter)
+- Font Awesome 6
 
 ## 📄 Licence
 
 Šī aplikācija ir izveidota personīgai lietošanai.
+
+© DS 2025 v1
