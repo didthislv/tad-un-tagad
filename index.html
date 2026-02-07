@@ -7,6 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <title>Tad un Tagad - Fotoattēlu Salīdzināšana</title>
     <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
         
@@ -147,6 +148,14 @@
             transition: all 0.3s ease;
             box-shadow: 0 2px 8px rgba(100, 100, 100, 0.4);
             touch-action: manipulation;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn i {
+            font-size: 0.9rem;
+            color: #444;
         }
 
         .btn:hover {
@@ -521,10 +530,22 @@
             </div>
 
             <div class="action-buttons">
-                <button class="btn" id="captureBtn" onclick="capturePhoto()">📷 Uzņemt foto</button>
-                <button class="btn btn-secondary" id="compareBtn" style="display: none;" onclick="toggleComparison()">🔄 Salīdzināt</button>
-                <button class="btn btn-secondary" id="saveBtn" style="display: none;" onclick="saveComparison()">💾 Saglabāt</button>
-                <button class="btn btn-danger" onclick="resetApp()">🔄 Sākt no jauna</button>
+                <button class="btn" id="captureBtn" onclick="capturePhoto()">
+                    <i class="fa-solid fa-camera"></i>
+                    Uzņemt foto
+                </button>
+                <button class="btn btn-secondary" id="compareBtn" style="display: none;" onclick="toggleComparison()">
+                    <i class="fa-solid fa-repeat" id="compareBtnIcon"></i>
+                    <span id="compareBtnText">Salīdzināt</span>
+                </button>
+                <button class="btn btn-secondary" id="saveBtn" style="display: none;" onclick="saveComparison()">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Saglabāt
+                </button>
+                <button class="btn btn-danger" onclick="resetApp()">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    Sākt no jauna
+                </button>
             </div>
 
             <div class="control-group" id="comparisonSliderGroup" style="display: none; padding-top: 30px;">
@@ -696,8 +717,8 @@
                 document.getElementById('captured-image').src = capturedImageData;
 
                 // Show compare and save buttons
-                document.getElementById('compareBtn').style.display = 'inline-block';
-                document.getElementById('saveBtn').style.display = 'inline-block';
+                document.getElementById('compareBtn').style.display = 'inline-flex';
+                document.getElementById('saveBtn').style.display = 'inline-flex';
 
                 // Haptic feedback if available
                 if (navigator.vibrate) {
@@ -714,6 +735,8 @@
             const video = document.getElementById('video-feed');
             const overlay = document.getElementById('historical-overlay');
             const compareBtn = document.getElementById('compareBtn');
+            const compareBtnText = document.getElementById('compareBtnText');
+            const compareBtnIcon = document.getElementById('compareBtnIcon');
             const opacityControl = document.getElementById('opacitySlider').parentElement;
             const zoomControl = document.getElementById('zoomSlider').parentElement;
             const comparisonSliderGroup = document.getElementById('comparisonSliderGroup');
@@ -725,13 +748,14 @@
                 sliderComp.classList.remove('active');
                 video.style.display = 'block';
                 overlay.style.display = 'block';
-                compareBtn.textContent = '🔄 Salīdzināt';
+                compareBtnText.textContent = 'Salīdzināt';
+                compareBtnIcon.className = 'fa-solid fa-repeat';
                 
                 // Show opacity, zoom, capture and reset buttons
                 opacityControl.style.display = 'block';
                 zoomControl.style.display = 'block';
-                captureBtn.style.display = 'inline-block';
-                resetBtn.style.display = 'inline-block';
+                captureBtn.style.display = 'inline-flex';
+                resetBtn.style.display = 'inline-flex';
                 comparisonSliderGroup.style.display = 'none';
             } else {
                 // Comparison mode
@@ -742,7 +766,8 @@
                 sliderComp.classList.add('active');
                 video.style.display = 'none';
                 overlay.style.display = 'none';
-                compareBtn.textContent = '📹 Atpakaļ uz kameru';
+                compareBtnText.textContent = 'Atpakaļ uz kameru';
+                compareBtnIcon.className = 'fa-solid fa-video';
                 
                 // Hide opacity, zoom, capture and reset buttons, show comparison slider
                 opacityControl.style.display = 'none';
@@ -863,7 +888,7 @@
                 document.getElementById('compareBtn').style.display = 'none';
                 document.getElementById('saveBtn').style.display = 'none';
                 document.getElementById('sliderComparison').classList.remove('active');
-                document.getElementById('captureBtn').style.display = 'inline-block';
+                document.getElementById('captureBtn').style.display = 'inline-flex';
                 document.getElementById('errorContainer').innerHTML = '';
                 
                 historicalImage = null;
