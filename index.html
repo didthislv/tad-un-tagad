@@ -456,7 +456,6 @@
                 <img id="historical-comparison" alt="Vēsturiskais attēls">
                 <img id="captured-image" alt="Uzņemtais attēls">
                 <div class="slider-divider" id="sliderDivider"></div>
-                <input type="range" class="comparison-slider" id="comparisonSlider" min="0" max="100" value="50">
             </div>
         </div>
 
@@ -475,6 +474,11 @@
                     <span class="control-value" id="zoomValue">1.0x</span>
                 </div>
                 <input type="range" id="zoomSlider" min="100" max="300" value="100">
+            <div class="control-group" id="comparisonSliderControl" style="display: none;">
+                <div class="control-label">
+                    <span>Salīdzinājuma slīdnis</span>
+                </div>
+                <input type="range" id="comparisonSlider" min="0" max="100" value="50">
             </div>
 
             <div class="action-buttons">
@@ -598,37 +602,68 @@
         function capturePhoto() {
             const video = document.getElementById('video-feed');
             const canvas = document.getElementById('snapshot-canvas');
+            const historicalImg = document.getElementById('historical-overlay');
 
-            // Set canvas size to match video
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const ctx = canvas.getContext('2d');
-
-            // Apply zoom transform
-            ctx.save();
-            ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.scale(currentZoom, currentZoom);
-            ctx.translate(-canvas.width / 2, -canvas.height / 2);
+            // Get historical image dimensions
+            const histImg = new Image();
+            histImg.src = historicalImage;
             
-            // Draw video frame
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            ctx.restore();
+            // Wait for image to load to get real dimensions
+            histImg.onload = function() {
+                const targetWidth = histImg.naturalWidth;
+                const targetHeight = histImg.naturalHeight;
+                const targetAspect = targetWidth / targetHeight;
+                
+                // Set canvas to match historical image size
+                canvas.width = targetWidth;
+                canvas.height = targetHeight;
+                
+                const ctx = canvas.getContext('2d');
+                
+                // Calculate crop dimensions to match aspect ratio
+                const videoAspect = video.videoWidth / video.videoHeight;
+                let sx, sy, sw, sh;
+                
+                if (videoAspect > targetAspect) {
+                    // Video is wider - crop sides
+                    sh = video.videoHeight;
+                    sw = sh * targetAspect;
+                    sx = (video.videoWidth - sw) / 2;
+                    sy = 0;
+                } else {
+                    // Video is taller - crop top/bottom
+                    sw = video.videoWidth;
+                    sh = sw / targetAspect;
+                    sx = 0;
+                    sy = (video.videoHeight - sh) / 2;
+                }
+                
+                // Apply zoom transform
+                ctx.save();
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.scale(currentZoom, currentZoom);
+                ctx.translate(-canvas.width / 2, -canvas.height / 2);
+                
+                // Draw cropped and scaled video frame
+                ctx.drawImage(video, sx, sy, sw, sh, 0, 0, targetWidth, targetHeight);
+                ctx.restore();
 
-            // Store captured image
-            capturedImageData = canvas.toDataURL('image/jpeg', 0.95);
-            document.getElementById('captured-image').src = capturedImageData;
+                // Store captured image
+                capturedImageData = canvas.toDataURL('image/jpeg', 0.95);
+                document.getElementById('captured-image').src = capturedImageData;
 
-            // Show compare and save buttons
-            document.getElementById('compareBtn').style.display = 'inline-block';
-            document.getElementById('saveBtn').style.display = 'inline-block';
-            document.getElementById('captureBtn').textContent = '📷 Uzņemt vēlreiz';
+                // Show compare and save buttons
+                document.getElementById('compareBtn').style.display = 'inline-block';
+                document.getElementById('saveBtn').style.display = 'inline-block';
+                document.getElementById('captureBtn').textContent = '📷 Uzņemt vēlreiz';
 
-            // Haptic feedback if available
-            if (navigator.vibrate) {
-                navigator.vibrate(50);
-            }
+                // Haptic feedback if available
+                if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                }
 
-            alert('✅ Foto uzņemts! Tagad vari salīdzināt vai saglabāt rezultātu.');
+                alert('✅ Foto uzņemts tādā pašā formātā kā vēsturiskais attēls!');
+            };
         }
 
         // Toggle comparison view
@@ -637,13 +672,23 @@
             const video = document.getElementById('video-feed');
             const overlay = document.getElementById('historical-overlay');
             const compareBtn = document.getElementById('compareBtn');
+            const opacityControl = document.getElementById('opacitySlider').parentElement;
+            const zoomControl = document.getElementById('zoomSlider').parentElement;
+            const sliderControl = document.getElementById('comparisonSliderControl');
 
             if (sliderComp.classList.contains('active')) {
+                // Back to camera mode
                 sliderComp.classList.remove('active');
                 video.style.display = 'block';
                 overlay.style.display = 'block';
                 compareBtn.textContent = '🔄 Salīdzināt';
+                
+                // Show opacity and zoom, hide comparison slider
+                opacityControl.style.display = 'block';
+                zoomControl.style.display = 'block';
+                sliderControl.style.display = 'none';
             } else {
+                // Comparison mode
                 if (!capturedImageData) {
                     alert('⚠️ Vispirms uzņem foto!');
                     return;
@@ -652,6 +697,12 @@
                 video.style.display = 'none';
                 overlay.style.display = 'none';
                 compareBtn.textContent = '📹 Atpakaļ uz kameru';
+                
+                // Hide opacity and zoom, show comparison slider
+                opacityControl.style.display = 'none';
+                zoomControl.style.display = 'none';
+                sliderControl.style.display = 'block';
+                
                 updateSliderComparison(50);
             }
         }
