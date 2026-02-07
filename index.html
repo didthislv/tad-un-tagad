@@ -312,18 +312,12 @@
         }
 
         .comparison-slider {
-            width: calc(100% - 20px);
-            margin: 10px 10px 0 10px;
-            height: 8px;
+            width: 100%;
+            height: 10px;
             border-radius: 5px;
             background: rgba(255, 255, 255, 0.2);
             outline: none;
             -webkit-appearance: none;
-            display: none;
-        }
-
-        .comparison-slider.active {
-            display: block;
         }
 
         .comparison-slider::-webkit-slider-thumb {
@@ -507,8 +501,6 @@
                 <img id="captured-image" alt="Uzņemtais attēls">
                 <div class="slider-divider" id="sliderDivider"></div>
             </div>
-            
-            <input type="range" class="comparison-slider" id="comparisonSlider" min="0" max="100" value="50" style="display: none;">
         </div>
 
         <div class="controls-panel" id="controlsPanel" style="display: none;">
@@ -526,6 +518,10 @@
                     <span class="control-value" id="zoomValue">1.0x</span>
                 </div>
                 <input type="range" id="zoomSlider" min="100" max="300" value="100">
+            </div>
+
+            <div class="control-group" id="comparisonSliderGroup" style="display: none;">
+                <input type="range" class="comparison-slider" id="comparisonSlider" min="0" max="100" value="50">
             </div>
 
             <div class="action-buttons">
@@ -702,7 +698,6 @@
                 // Show compare and save buttons
                 document.getElementById('compareBtn').style.display = 'inline-block';
                 document.getElementById('saveBtn').style.display = 'inline-block';
-                document.getElementById('captureBtn').textContent = '📷 Uzņemt vēlreiz';
 
                 // Haptic feedback if available
                 if (navigator.vibrate) {
@@ -721,7 +716,8 @@
             const compareBtn = document.getElementById('compareBtn');
             const opacityControl = document.getElementById('opacitySlider').parentElement;
             const zoomControl = document.getElementById('zoomSlider').parentElement;
-            const comparisonSlider = document.getElementById('comparisonSlider');
+            const comparisonSliderGroup = document.getElementById('comparisonSliderGroup');
+            const captureBtn = document.getElementById('captureBtn');
 
             if (sliderComp.classList.contains('active')) {
                 // Back to camera mode
@@ -729,11 +725,12 @@
                 video.style.display = 'block';
                 overlay.style.display = 'block';
                 compareBtn.textContent = '🔄 Salīdzināt';
-                comparisonSlider.classList.remove('active');
                 
-                // Show opacity and zoom
+                // Show opacity, zoom and capture button
                 opacityControl.style.display = 'block';
                 zoomControl.style.display = 'block';
+                captureBtn.style.display = 'inline-block';
+                comparisonSliderGroup.style.display = 'none';
             } else {
                 // Comparison mode
                 if (!capturedImageData) {
@@ -744,11 +741,12 @@
                 video.style.display = 'none';
                 overlay.style.display = 'none';
                 compareBtn.textContent = '📹 Atpakaļ uz kameru';
-                comparisonSlider.classList.add('active');
                 
-                // Hide opacity and zoom
+                // Hide opacity, zoom and capture button, show comparison slider
                 opacityControl.style.display = 'none';
                 zoomControl.style.display = 'none';
+                captureBtn.style.display = 'none';
+                comparisonSliderGroup.style.display = 'block';
                 
                 updateSliderComparison(50);
             }
@@ -862,7 +860,7 @@
                 document.getElementById('compareBtn').style.display = 'none';
                 document.getElementById('saveBtn').style.display = 'none';
                 document.getElementById('sliderComparison').classList.remove('active');
-                document.getElementById('captureBtn').textContent = '📷 Uzņemt foto';
+                document.getElementById('captureBtn').style.display = 'inline-block';
                 document.getElementById('errorContainer').innerHTML = '';
                 
                 historicalImage = null;
