@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="lv">
+<html lang="lv" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -18,9 +18,11 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        :root {
+        /* ===== TUMŠĀ TĒMA ===== */
+        [data-theme="dark"] {
             --bg-primary: #0a0a0f;
             --bg-secondary: #101018;
+            --bg-card: rgba(255, 255, 255, 0.03);
             --text-primary: #e8e8ed;
             --text-secondary: #8888a0;
             --text-muted: #55556a;
@@ -30,6 +32,74 @@
             --accent-glow: rgba(108, 92, 231, 0.3);
             --border: rgba(255, 255, 255, 0.06);
             --glass: rgba(255, 255, 255, 0.04);
+            --slider-track: rgba(255, 255, 255, 0.06);
+            --toast-success-bg: rgba(34, 197, 94, 0.15);
+            --toast-success-text: #86efac;
+            --toast-success-border: rgba(34, 197, 94, 0.2);
+            --toast-warning-bg: rgba(234, 179, 8, 0.15);
+            --toast-warning-text: #fde68a;
+            --toast-warning-border: rgba(234, 179, 8, 0.2);
+            --error-bg: rgba(239, 68, 68, 0.08);
+            --error-border: rgba(239, 68, 68, 0.2);
+            --error-text: #f87171;
+            --danger-bg: rgba(239, 68, 68, 0.1);
+            --danger-text: #f87171;
+            --danger-border: rgba(239, 68, 68, 0.15);
+            --status-bg: rgba(0, 0, 0, 0.7);
+            --pill-bg: rgba(168, 85, 247, 0.1);
+            --mesh-1: rgba(108, 92, 231, 0.08);
+            --mesh-2: rgba(168, 85, 247, 0.06);
+            --mesh-3: rgba(236, 72, 153, 0.05);
+            --comp-then-bg: rgba(108, 92, 231, 0.3);
+            --comp-then-text: #c4b5fd;
+            --comp-now-bg: rgba(236, 72, 153, 0.3);
+            --comp-now-text: #f9a8d4;
+            --vf-color: rgba(108, 92, 231, 0.5);
+            --thumb-border: rgba(255, 255, 255, 0.2);
+            --save-then: #c4b5fd;
+            --save-now: #f9a8d4;
+        }
+
+        /* ===== GAIŠĀ TĒMA ===== */
+        [data-theme="light"] {
+            --bg-primary: #f5f5f7;
+            --bg-secondary: #eeeef0;
+            --bg-card: rgba(0, 0, 0, 0.02);
+            --text-primary: #1a1a2e;
+            --text-secondary: #6b6b80;
+            --text-muted: #9999aa;
+            --accent-1: #6c5ce7;
+            --accent-2: #9333ea;
+            --accent-3: #db2777;
+            --accent-glow: rgba(108, 92, 231, 0.2);
+            --border: rgba(0, 0, 0, 0.08);
+            --glass: rgba(0, 0, 0, 0.03);
+            --slider-track: rgba(0, 0, 0, 0.08);
+            --toast-success-bg: rgba(34, 197, 94, 0.12);
+            --toast-success-text: #15803d;
+            --toast-success-border: rgba(34, 197, 94, 0.25);
+            --toast-warning-bg: rgba(234, 179, 8, 0.12);
+            --toast-warning-text: #a16207;
+            --toast-warning-border: rgba(234, 179, 8, 0.25);
+            --error-bg: rgba(239, 68, 68, 0.06);
+            --error-border: rgba(239, 68, 68, 0.2);
+            --error-text: #dc2626;
+            --danger-bg: rgba(239, 68, 68, 0.08);
+            --danger-text: #dc2626;
+            --danger-border: rgba(239, 68, 68, 0.18);
+            --status-bg: rgba(255, 255, 255, 0.85);
+            --pill-bg: rgba(147, 51, 234, 0.1);
+            --mesh-1: rgba(108, 92, 231, 0.05);
+            --mesh-2: rgba(147, 51, 234, 0.04);
+            --mesh-3: rgba(219, 39, 119, 0.03);
+            --comp-then-bg: rgba(108, 92, 231, 0.15);
+            --comp-then-text: #5b21b6;
+            --comp-now-bg: rgba(219, 39, 119, 0.15);
+            --comp-now-text: #9d174d;
+            --vf-color: rgba(108, 92, 231, 0.4);
+            --thumb-border: rgba(255, 255, 255, 0.6);
+            --save-then: #6c5ce7;
+            --save-now: #db2777;
         }
 
         body {
@@ -41,9 +111,9 @@
             position: fixed;
             width: 100%;
             height: 100%;
+            transition: background 0.4s ease, color 0.4s ease;
         }
 
-        /* Animated background */
         .bg-mesh {
             position: fixed;
             top: 0; left: 0;
@@ -59,9 +129,9 @@
             top: -50%; left: -50%;
             width: 200%; height: 200%;
             background: 
-                radial-gradient(ellipse at 20% 50%, rgba(108,92,231,0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(168,85,247,0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 80%, rgba(236,72,153,0.05) 0%, transparent 50%);
+                radial-gradient(ellipse at 20% 50%, var(--mesh-1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, var(--mesh-2) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, var(--mesh-3) 0%, transparent 50%);
             animation: meshMove 20s ease-in-out infinite alternate;
         }
 
@@ -86,6 +156,14 @@
             text-align: center;
             padding: 8px 16px 4px;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .header-content {
+            text-align: center;
         }
 
         .logo-row {
@@ -128,9 +206,57 @@
             letter-spacing: 0.05em;
         }
 
+        /* Theme toggle */
+        .theme-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 22px;
+            border-radius: 50px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            touch-action: manipulation;
+        }
+
+        .theme-toggle:active {
+            transform: translateY(-50%) scale(0.92);
+        }
+
+        .theme-toggle-knob {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px var(--accent-glow);
+        }
+
+        .theme-toggle-knob i {
+            font-size: 8px;
+            color: white;
+        }
+
+        [data-theme="light"] .theme-toggle-knob {
+            transform: translateX(18px);
+        }
+
+        [data-theme="light"] .theme-toggle {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
         /* Upload Section */
         .upload-section {
-            background: var(--glass);
+            background: var(--bg-card);
             backdrop-filter: blur(20px);
             border: 1px solid var(--border);
             border-radius: 16px;
@@ -269,9 +395,9 @@
         .btn-ghost:active { transform: scale(0.96); }
 
         .btn-danger {
-            background: rgba(239,68,68,0.1);
-            color: #f87171;
-            border: 1px solid rgba(239,68,68,0.15);
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            border: 1px solid var(--danger-border);
         }
 
         .btn-danger:active { transform: scale(0.96); }
@@ -319,7 +445,7 @@
         .vf-corner {
             position: absolute;
             width: 20px; height: 20px;
-            border-color: rgba(108,92,231,0.5);
+            border-color: var(--vf-color);
             border-style: solid;
             border-width: 0;
         }
@@ -341,7 +467,7 @@
             font-family: 'Space Grotesk', sans-serif;
             font-size: 0.6rem;
             font-weight: 500;
-            background: rgba(0,0,0,0.7);
+            background: var(--status-bg);
             backdrop-filter: blur(10px);
             border: 1px solid var(--border);
             color: var(--text-secondary);
@@ -379,6 +505,7 @@
             border-top: 1px solid var(--border);
             padding: 8px 12px 6px;
             flex-shrink: 0;
+            transition: background 0.4s ease;
         }
 
         .control-group {
@@ -410,7 +537,7 @@
             font-size: 0.65rem;
             font-weight: 600;
             color: var(--accent-2);
-            background: rgba(168,85,247,0.1);
+            background: var(--pill-bg);
             padding: 1px 7px;
             border-radius: 20px;
         }
@@ -419,7 +546,7 @@
             width: 100%;
             height: 3px;
             border-radius: 3px;
-            background: rgba(255,255,255,0.06);
+            background: var(--slider-track);
             outline: none;
             -webkit-appearance: none;
         }
@@ -431,7 +558,7 @@
             background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
             cursor: pointer;
             box-shadow: 0 0 8px var(--accent-glow);
-            border: 2px solid rgba(255,255,255,0.2);
+            border: 2px solid var(--thumb-border);
         }
 
         input[type="range"]::-webkit-slider-thumb:active {
@@ -443,7 +570,7 @@
             border-radius: 50%;
             background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
             cursor: pointer;
-            border: 2px solid rgba(255,255,255,0.2);
+            border: 2px solid var(--thumb-border);
         }
 
         /* Comparison */
@@ -472,9 +599,7 @@
             z-index: 2;
         }
 
-        #captured-image {
-            z-index: 1;
-        }
+        #captured-image { z-index: 1; }
 
         .slider-divider {
             position: absolute;
@@ -512,15 +637,15 @@
         }
 
         .comp-label.then {
-            background: rgba(108,92,231,0.3);
-            color: #c4b5fd;
-            border: 1px solid rgba(108,92,231,0.3);
+            background: var(--comp-then-bg);
+            color: var(--comp-then-text);
+            border: 1px solid var(--comp-then-bg);
         }
 
         .comp-label.now {
-            background: rgba(236,72,153,0.3);
-            color: #f9a8d4;
-            border: 1px solid rgba(236,72,153,0.3);
+            background: var(--comp-now-bg);
+            color: var(--comp-now-text);
+            border: 1px solid var(--comp-now-bg);
         }
 
         /* Comparison slider */
@@ -528,7 +653,7 @@
             width: 100%;
             height: 6px;
             border-radius: 6px;
-            background: rgba(255,255,255,0.08);
+            background: var(--slider-track);
             outline: none;
             -webkit-appearance: none;
         }
@@ -539,8 +664,8 @@
             border-radius: 50%;
             background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
             cursor: pointer;
-            box-shadow: 0 0 20px var(--accent-glow), 0 4px 12px rgba(0,0,0,0.4);
-            border: 3px solid rgba(255,255,255,0.3);
+            box-shadow: 0 0 20px var(--accent-glow), 0 4px 12px rgba(0,0,0,0.3);
+            border: 3px solid var(--thumb-border);
         }
 
         .comparison-slider::-moz-range-thumb {
@@ -548,7 +673,7 @@
             border-radius: 50%;
             background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
             cursor: pointer;
-            border: 3px solid rgba(255,255,255,0.3);
+            border: 3px solid var(--thumb-border);
         }
 
         .action-buttons {
@@ -595,6 +720,7 @@
             font-size: 0.55rem;
             letter-spacing: 0.08em;
             color: var(--text-muted);
+            transition: color 0.4s ease;
         }
 
         /* Toast */
@@ -610,7 +736,6 @@
             font-weight: 500;
             z-index: 10000;
             backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
             transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
             display: flex;
             align-items: center;
@@ -621,23 +746,23 @@
         .toast.show { transform: translateX(-50%) translateY(0); }
 
         .toast.success {
-            background: rgba(34,197,94,0.15);
-            color: #86efac;
-            border-color: rgba(34,197,94,0.2);
+            background: var(--toast-success-bg);
+            color: var(--toast-success-text);
+            border: 1px solid var(--toast-success-border);
         }
 
         .toast.warning {
-            background: rgba(234,179,8,0.15);
-            color: #fde68a;
-            border-color: rgba(234,179,8,0.2);
+            background: var(--toast-warning-bg);
+            color: var(--toast-warning-text);
+            border: 1px solid var(--toast-warning-border);
         }
 
         .toast i { font-size: 0.9rem; }
 
         /* Error */
         .error-message {
-            background: rgba(239,68,68,0.08);
-            border: 1px solid rgba(239,68,68,0.2);
+            background: var(--error-bg);
+            border: 1px solid var(--error-border);
             border-radius: 10px;
             padding: 14px 18px;
             margin: 10px 16px;
@@ -647,7 +772,7 @@
         .error-message h3 {
             font-family: 'Space Grotesk', sans-serif;
             margin-bottom: 4px;
-            color: #f87171;
+            color: var(--error-text);
             font-size: 0.85rem;
         }
 
@@ -692,7 +817,6 @@
         canvas { display: none; }
         #download-link { display: none; }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .action-buttons {
                 flex-direction: column;
@@ -723,13 +847,20 @@
     
     <div class="container">
         <header>
-            <div class="logo-row">
-                <div class="logo-icon">
-                    <i class="fa-solid fa-clock-rotate-left"></i>
+            <div class="header-content">
+                <div class="logo-row">
+                    <div class="logo-icon">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <h1>Tad un Tagad</h1>
                 </div>
-                <h1>Tad un Tagad</h1>
+                <p class="subtitle">Salīdzini vēsturi ar tagadni</p>
             </div>
-            <p class="subtitle">Salīdzini vēsturi ar tagadni</p>
+            <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+                <div class="theme-toggle-knob">
+                    <i class="fa-solid fa-moon" id="themeIcon"></i>
+                </div>
+            </div>
         </header>
 
         <div class="upload-section" id="uploadSection" onclick="document.getElementById('historicalInput').click()">
@@ -840,6 +971,34 @@
         let capturedImageData = null;
         let currentZoom = 1;
 
+        // ===== TĒMU PĀRSLĒGŠANA =====
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            const currentTheme = html.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                html.setAttribute('data-theme', 'light');
+                icon.className = 'fa-solid fa-sun';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                icon.className = 'fa-solid fa-moon';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Ielādēt saglabāto tēmu
+        (function loadTheme() {
+            const saved = localStorage.getItem('theme');
+            if (saved) {
+                document.documentElement.setAttribute('data-theme', saved);
+                const icon = document.getElementById('themeIcon');
+                icon.className = saved === 'light' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            }
+        })();
+
+        // ===== TOAST =====
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             const toastIcon = document.getElementById('toastIcon');
@@ -869,8 +1028,7 @@
         }
 
         function showError(message) {
-            const errorContainer = document.getElementById('errorContainer');
-            errorContainer.innerHTML = `
+            document.getElementById('errorContainer').innerHTML = `
                 <div class="error-message">
                     <h3><i class="fa-solid fa-triangle-exclamation" style="margin-right:6px;"></i>Brīdinājums</h3>
                     <p>${message}</p>
@@ -887,10 +1045,7 @@
                     document.getElementById('historical-overlay').src = historicalImage;
                     document.getElementById('historical-comparison').src = historicalImage;
                     document.getElementById('uploadSection').classList.add('active');
-                    
-                    if (checkSecureContext()) {
-                        startCamera();
-                    }
+                    if (checkSecureContext()) startCamera();
                 };
                 reader.readAsDataURL(file);
             }
@@ -906,16 +1061,15 @@
             `;
 
             try {
-                const constraints = {
+                stream = await navigator.mediaDevices.getUserMedia({
                     video: {
                         facingMode: { ideal: 'environment' },
                         width: { ideal: 1920 },
                         height: { ideal: 1080 }
                     },
                     audio: false
-                };
-
-                stream = await navigator.mediaDevices.getUserMedia(constraints);
+                });
+                
                 const video = document.getElementById('video-feed');
                 video.srcObject = stream;
                 
@@ -929,26 +1083,17 @@
                 };
 
             } catch (error) {
-                console.error('Camera error:', error);
-                let errorMessage = 'Neizdevās piekļūt kamerai. ';
-                
-                if (error.name === 'NotAllowedError') {
-                    errorMessage += 'Lūdzu, atļauj kameras piekļuvi pārlūkprogrammas iestatījumos.';
-                } else if (error.name === 'NotFoundError') {
-                    errorMessage += 'Kamera netika atrasta.';
-                } else if (error.name === 'NotReadableError') {
-                    errorMessage += 'Kamera jau tiek izmantota citā aplikācijā.';
-                } else {
-                    errorMessage += 'Pārliecinies, ka esi piešķīris atļauju kameras lietošanai.';
-                }
-                
-                showError(errorMessage);
+                let msg = 'Neizdevās piekļūt kamerai. ';
+                if (error.name === 'NotAllowedError') msg += 'Lūdzu, atļauj kameras piekļuvi iestatījumos.';
+                else if (error.name === 'NotFoundError') msg += 'Kamera netika atrasta.';
+                else if (error.name === 'NotReadableError') msg += 'Kamera tiek izmantota citur.';
+                else msg += 'Pārliecinies par kameras atļauju.';
+                showError(msg);
             }
         }
 
         document.getElementById('opacitySlider').addEventListener('input', function(e) {
-            const opacity = e.target.value / 100;
-            document.getElementById('historical-overlay').style.opacity = opacity;
+            document.getElementById('historical-overlay').style.opacity = e.target.value / 100;
             document.getElementById('opacityValue').textContent = e.target.value + '%';
         });
 
@@ -961,44 +1106,35 @@
         function capturePhoto() {
             const video = document.getElementById('video-feed');
             const canvas = document.getElementById('snapshot-canvas');
-
             const histImg = new Image();
             histImg.src = historicalImage;
             
             histImg.onload = function() {
-                const targetWidth = histImg.naturalWidth;
-                const targetHeight = histImg.naturalHeight;
-                const targetAspect = targetWidth / targetHeight;
-                
-                canvas.width = targetWidth;
-                canvas.height = targetHeight;
-                
+                const tw = histImg.naturalWidth, th = histImg.naturalHeight;
+                const ta = tw / th;
+                canvas.width = tw;
+                canvas.height = th;
                 const ctx = canvas.getContext('2d');
-                const videoAspect = video.videoWidth / video.videoHeight;
+                const va = video.videoWidth / video.videoHeight;
                 let sx, sy, sw, sh;
                 
-                if (videoAspect > targetAspect) {
-                    sh = video.videoHeight;
-                    sw = sh * targetAspect;
-                    sx = (video.videoWidth - sw) / 2;
-                    sy = 0;
+                if (va > ta) {
+                    sh = video.videoHeight; sw = sh * ta;
+                    sx = (video.videoWidth - sw) / 2; sy = 0;
                 } else {
-                    sw = video.videoWidth;
-                    sh = sw / targetAspect;
-                    sx = 0;
-                    sy = (video.videoHeight - sh) / 2;
+                    sw = video.videoWidth; sh = sw / ta;
+                    sx = 0; sy = (video.videoHeight - sh) / 2;
                 }
                 
                 ctx.save();
-                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.translate(tw/2, th/2);
                 ctx.scale(currentZoom, currentZoom);
-                ctx.translate(-canvas.width / 2, -canvas.height / 2);
-                ctx.drawImage(video, sx, sy, sw, sh, 0, 0, targetWidth, targetHeight);
+                ctx.translate(-tw/2, -th/2);
+                ctx.drawImage(video, sx, sy, sw, sh, 0, 0, tw, th);
                 ctx.restore();
 
                 capturedImageData = canvas.toDataURL('image/jpeg', 0.95);
                 document.getElementById('captured-image').src = capturedImageData;
-
                 document.getElementById('compareBtn').style.display = 'inline-flex';
                 document.getElementById('saveBtn').style.display = 'inline-flex';
 
@@ -1008,59 +1144,54 @@
         }
 
         function toggleComparison() {
-            const sliderComp = document.getElementById('sliderComparison');
-            const video = document.getElementById('video-feed');
-            const overlay = document.getElementById('historical-overlay');
-            const compareBtnText = document.getElementById('compareBtnText');
-            const compareBtnIcon = document.getElementById('compareBtnIcon');
-            const opacityGroup = document.getElementById('opacityGroup');
-            const zoomGroup = document.getElementById('zoomGroup');
-            const comparisonSliderGroup = document.getElementById('comparisonSliderGroup');
-            const captureBtn = document.getElementById('captureBtn');
-            const resetBtn = document.getElementById('resetBtn');
-            const sliderHint = document.getElementById('sliderHint');
-            const statusPill = document.getElementById('statusPill');
-            const viewfinder = document.getElementById('viewfinder');
+            const sc = document.getElementById('sliderComparison');
+            const vid = document.getElementById('video-feed');
+            const ov = document.getElementById('historical-overlay');
+            const cText = document.getElementById('compareBtnText');
+            const cIcon = document.getElementById('compareBtnIcon');
+            const og = document.getElementById('opacityGroup');
+            const zg = document.getElementById('zoomGroup');
+            const csg = document.getElementById('comparisonSliderGroup');
+            const cap = document.getElementById('captureBtn');
+            const rst = document.getElementById('resetBtn');
+            const hint = document.getElementById('sliderHint');
+            const pill = document.getElementById('statusPill');
+            const vf = document.getElementById('viewfinder');
 
-            if (sliderComp.classList.contains('active')) {
-                // Back to camera
-                sliderComp.classList.remove('active');
-                video.style.display = 'block';
-                overlay.style.display = 'block';
-                compareBtnText.textContent = 'Salīdzināt';
-                compareBtnIcon.className = 'fa-solid fa-repeat';
-                opacityGroup.style.display = 'block';
-                zoomGroup.style.display = 'block';
-                captureBtn.style.display = 'inline-flex';
-                resetBtn.style.display = 'inline-flex';
-                comparisonSliderGroup.style.display = 'none';
-                sliderHint.classList.remove('active');
-                statusPill.classList.add('active');
-                viewfinder.style.display = 'block';
+            if (sc.classList.contains('active')) {
+                sc.classList.remove('active');
+                vid.style.display = 'block';
+                ov.style.display = 'block';
+                cText.textContent = 'Salīdzināt';
+                cIcon.className = 'fa-solid fa-repeat';
+                og.style.display = 'block';
+                zg.style.display = 'block';
+                cap.style.display = 'inline-flex';
+                rst.style.display = 'inline-flex';
+                csg.style.display = 'none';
+                hint.classList.remove('active');
+                pill.classList.add('active');
+                vf.style.display = 'block';
             } else {
-                // Comparison mode
                 if (!capturedImageData) {
                     showToast('Vispirms uzņem foto!', 'warning');
                     return;
                 }
-
-                // Reset slider to middle
                 document.getElementById('comparisonSlider').value = 50;
                 updateSliderComparison(50);
-
-                sliderComp.classList.add('active');
-                video.style.display = 'none';
-                overlay.style.display = 'none';
-                compareBtnText.textContent = 'Atpakaļ';
-                compareBtnIcon.className = 'fa-solid fa-video';
-                opacityGroup.style.display = 'none';
-                zoomGroup.style.display = 'none';
-                captureBtn.style.display = 'none';
-                resetBtn.style.display = 'none';
-                comparisonSliderGroup.style.display = 'block';
-                sliderHint.classList.add('active');
-                statusPill.classList.remove('active');
-                viewfinder.style.display = 'none';
+                sc.classList.add('active');
+                vid.style.display = 'none';
+                ov.style.display = 'none';
+                cText.textContent = 'Atpakaļ';
+                cIcon.className = 'fa-solid fa-video';
+                og.style.display = 'none';
+                zg.style.display = 'none';
+                cap.style.display = 'none';
+                rst.style.display = 'none';
+                csg.style.display = 'block';
+                hint.classList.add('active');
+                pill.classList.remove('active');
+                vf.style.display = 'none';
             }
         }
 
@@ -1068,14 +1199,10 @@
             updateSliderComparison(parseInt(e.target.value));
         });
 
-        function updateSliderComparison(value) {
-            const divider = document.getElementById('sliderDivider');
-            const historicalImg = document.getElementById('historical-comparison');
-            const capturedImg = document.getElementById('captured-image');
-            
-            divider.style.left = value + '%';
-            historicalImg.style.clipPath = `inset(0 ${100 - value}% 0 0)`;
-            capturedImg.style.clipPath = `inset(0 0 0 ${value}%)`;
+        function updateSliderComparison(v) {
+            document.getElementById('sliderDivider').style.left = v + '%';
+            document.getElementById('historical-comparison').style.clipPath = `inset(0 ${100-v}% 0 0)`;
+            document.getElementById('captured-image').style.clipPath = `inset(0 0 0 ${v}%)`;
         }
 
         function saveComparison() {
@@ -1086,59 +1213,58 @@
 
             const canvas = document.getElementById('snapshot-canvas');
             const ctx = canvas.getContext('2d');
-
             const img1 = new Image();
             const img2 = new Image();
             
+            // Nolasām tēmu saglabāšanai
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const style = getComputedStyle(document.documentElement);
+            const thenColor = style.getPropertyValue('--save-then').trim();
+            const nowColor = style.getPropertyValue('--save-now').trim();
+            const bgColor = style.getPropertyValue('--bg-primary').trim();
+
             img1.onload = function() {
                 img2.onload = function() {
-                    const maxWidth = Math.max(img1.width, img2.width);
-                    const maxHeight = Math.max(img1.height, img2.height);
-                    
-                    canvas.width = maxWidth * 2;
-                    canvas.height = maxHeight;
+                    const mw = Math.max(img1.width, img2.width);
+                    const mh = Math.max(img1.height, img2.height);
+                    canvas.width = mw * 2;
+                    canvas.height = mh;
 
-                    ctx.fillStyle = '#0a0a0f';
+                    ctx.fillStyle = bgColor;
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                    const x1 = (maxWidth - img1.width) / 2;
-                    const y1 = (maxHeight - img1.height) / 2;
-                    ctx.drawImage(img1, x1, y1, img1.width, img1.height);
-                    
-                    const x2 = maxWidth + (maxWidth - img2.width) / 2;
-                    const y2 = (maxHeight - img2.height) / 2;
-                    ctx.drawImage(img2, x2, y2, img2.width, img2.height);
+                    ctx.drawImage(img1, (mw-img1.width)/2, (mh-img1.height)/2);
+                    ctx.drawImage(img2, mw+(mw-img2.width)/2, (mh-img2.height)/2);
 
-                    const gradient = ctx.createLinearGradient(maxWidth, 0, maxWidth, maxHeight);
-                    gradient.addColorStop(0, '#6c5ce7');
-                    gradient.addColorStop(0.5, '#a855f7');
-                    gradient.addColorStop(1, '#ec4899');
-                    ctx.strokeStyle = gradient;
+                    const grad = ctx.createLinearGradient(mw, 0, mw, mh);
+                    grad.addColorStop(0, '#6c5ce7');
+                    grad.addColorStop(0.5, '#a855f7');
+                    grad.addColorStop(1, '#ec4899');
+                    ctx.strokeStyle = grad;
                     ctx.lineWidth = 6;
                     ctx.beginPath();
-                    ctx.moveTo(maxWidth, 0);
-                    ctx.lineTo(maxWidth, maxHeight);
+                    ctx.moveTo(mw, 0);
+                    ctx.lineTo(mw, mh);
                     ctx.stroke();
 
-                    const fontSize = Math.max(32, maxHeight / 20);
-                    ctx.font = `bold ${fontSize}px sans-serif`;
-                    ctx.strokeStyle = '#0a0a0f';
+                    const fs = Math.max(32, mh/20);
+                    ctx.font = `bold ${fs}px sans-serif`;
+                    ctx.strokeStyle = bgColor;
                     ctx.lineWidth = 4;
-                    
-                    const padding = 30;
-                    ctx.fillStyle = '#c4b5fd';
-                    ctx.strokeText('TAD', padding, fontSize + padding);
-                    ctx.fillText('TAD', padding, fontSize + padding);
-                    
-                    ctx.fillStyle = '#f9a8d4';
-                    ctx.strokeText('TAGAD', maxWidth + padding, fontSize + padding);
-                    ctx.fillText('TAGAD', maxWidth + padding, fontSize + padding);
+                    const p = 30;
 
-                    const link = document.getElementById('download-link');
-                    link.href = canvas.toDataURL('image/jpeg', 0.95);
-                    link.click();
+                    ctx.fillStyle = thenColor;
+                    ctx.strokeText('TAD', p, fs+p);
+                    ctx.fillText('TAD', p, fs+p);
 
-                    if (navigator.vibrate) navigator.vibrate([50, 100, 50]);
+                    ctx.fillStyle = nowColor;
+                    ctx.strokeText('TAGAD', mw+p, fs+p);
+                    ctx.fillText('TAGAD', mw+p, fs+p);
+
+                    document.getElementById('download-link').href = canvas.toDataURL('image/jpeg', 0.95);
+                    document.getElementById('download-link').click();
+
+                    if (navigator.vibrate) navigator.vibrate([50,100,50]);
                     showToast('Salīdzinājums saglabāts!');
                 };
                 img2.src = capturedImageData;
@@ -1148,9 +1274,7 @@
 
         function resetApp() {
             if (confirm('Vai tiešām vēlies sākt no jauna?')) {
-                if (stream) {
-                    stream.getTracks().forEach(track => track.stop());
-                }
+                if (stream) stream.getTracks().forEach(t => t.stop());
                 
                 document.getElementById('uploadSection').classList.remove('active');
                 document.getElementById('cameraContainer').classList.remove('active');
@@ -1181,9 +1305,7 @@
         }
 
         document.body.addEventListener('touchmove', function(e) {
-            if (e.target.closest('.camera-container')) {
-                e.preventDefault();
-            }
+            if (e.target.closest('.camera-container')) e.preventDefault();
         }, { passive: false });
     </script>
 </body>
