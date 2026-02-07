@@ -20,9 +20,9 @@
         :root {
             --primary: #000000;
             --secondary: #000000;
-            --accent: #e94560;
-            --light: #f1f1f1;
-            --gold: #d4af37;
+            --accent: #888888;
+            --light: #cccccc;
+            --gold: #999999;
         }
 
         body {
@@ -69,7 +69,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            background: linear-gradient(90deg, var(--gold), var(--accent), var(--gold));
+            background: linear-gradient(90deg, #aaa, #666, #aaa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -78,8 +78,8 @@
         }
 
         @keyframes glowPulse {
-            0%, 100% { filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4)); }
-            50% { filter: drop-shadow(0 0 20px rgba(233, 69, 96, 0.6)); }
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(150, 150, 150, 0.4)); }
+            50% { filter: drop-shadow(0 0 20px rgba(100, 100, 100, 0.6)); }
         }
 
         .subtitle {
@@ -134,7 +134,7 @@
 
         .btn {
             font-family: 'Oswald', sans-serif;
-            background: linear-gradient(135deg, var(--accent), #c7315a);
+            background: linear-gradient(135deg, #777, #555);
             color: white;
             border: none;
             padding: 8px 18px;
@@ -145,13 +145,13 @@
             letter-spacing: 0.05em;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(233, 69, 96, 0.4);
+            box-shadow: 0 2px 8px rgba(100, 100, 100, 0.4);
             touch-action: manipulation;
         }
 
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(233, 69, 96, 0.6);
+            box-shadow: 0 8px 20px rgba(100, 100, 100, 0.6);
         }
 
         .btn:active {
@@ -211,11 +211,6 @@
             margin-bottom: 0;
         }
 
-        #comparisonSliderGroup {
-            margin-top: 50px;
-            margin-bottom: 0;
-        }
-
         .control-label {
             font-family: 'Oswald', sans-serif;
             display: flex;
@@ -225,7 +220,7 @@
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: var(--gold);
+            color: #999;
         }
 
         .control-value {
@@ -249,15 +244,15 @@
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--gold), var(--accent));
+            background: linear-gradient(135deg, #aaa, #666);
             cursor: pointer;
-            box-shadow: 0 0 8px rgba(233, 69, 96, 0.5);
+            box-shadow: 0 0 8px rgba(150, 150, 150, 0.5);
             transition: all 0.2s ease;
         }
 
         input[type="range"]::-webkit-slider-thumb:active {
             transform: scale(1.2);
-            box-shadow: 0 0 25px rgba(233, 69, 96, 0.8);
+            box-shadow: 0 0 15px rgba(150, 150, 150, 0.8);
         }
 
         input[type="range"]::-moz-range-thumb {
@@ -309,9 +304,9 @@
             left: 50%;
             width: 4px;
             height: 100%;
-            background: linear-gradient(180deg, var(--gold), var(--accent));
+            background: linear-gradient(180deg, #aaa, #666);
             transform: translateX(-50%);
-            box-shadow: 0 0 20px rgba(233, 69, 96, 0.6);
+            box-shadow: 0 0 20px rgba(150, 150, 150, 0.6);
             pointer-events: none;
             z-index: 5;
         }
@@ -331,9 +326,9 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--gold), var(--accent));
+            background: linear-gradient(135deg, #aaa, #666);
             cursor: pointer;
-            box-shadow: 0 0 25px rgba(233, 69, 96, 0.8);
+            box-shadow: 0 0 25px rgba(150, 150, 150, 0.8);
             border: 4px solid white;
         }
 
@@ -341,10 +336,10 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--gold), var(--accent));
+            background: linear-gradient(135deg, #aaa, #666);
             cursor: pointer;
             border: 4px solid white;
-            box-shadow: 0 0 25px rgba(233, 69, 96, 0.8);
+            box-shadow: 0 0 25px rgba(150, 150, 150, 0.8);
         }
 
         .slider-divider {
@@ -379,11 +374,11 @@
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, var(--gold), #b8941f);
+            background: linear-gradient(135deg, #888, #666);
         }
 
         .btn-secondary:hover {
-            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.6);
+            box-shadow: 0 8px 20px rgba(120, 120, 120, 0.6);
         }
 
         .btn-danger {
@@ -525,15 +520,15 @@
                 <input type="range" id="zoomSlider" min="100" max="300" value="100">
             </div>
 
-            <div class="control-group" id="comparisonSliderGroup" style="display: none;">
-                <input type="range" class="comparison-slider" id="comparisonSlider" min="0" max="100" value="50">
-            </div>
-
             <div class="action-buttons">
                 <button class="btn" id="captureBtn" onclick="capturePhoto()">📷 Uzņemt foto</button>
                 <button class="btn btn-secondary" id="compareBtn" style="display: none;" onclick="toggleComparison()">🔄 Salīdzināt</button>
                 <button class="btn btn-secondary" id="saveBtn" style="display: none;" onclick="saveComparison()">💾 Saglabāt</button>
                 <button class="btn btn-danger" onclick="resetApp()">🔄 Sākt no jauna</button>
+            </div>
+
+            <div class="control-group" id="comparisonSliderGroup" style="display: none; padding-top: 30px;">
+                <input type="range" class="comparison-slider" id="comparisonSlider" min="0" max="100" value="50">
             </div>
         </div>
     </div>
