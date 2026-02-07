@@ -718,6 +718,7 @@
             const zoomControl = document.getElementById('zoomSlider').parentElement;
             const comparisonSliderGroup = document.getElementById('comparisonSliderGroup');
             const captureBtn = document.getElementById('captureBtn');
+            const resetBtn = document.querySelector('.btn-danger');
 
             if (sliderComp.classList.contains('active')) {
                 // Back to camera mode
@@ -726,10 +727,11 @@
                 overlay.style.display = 'block';
                 compareBtn.textContent = '🔄 Salīdzināt';
                 
-                // Show opacity, zoom and capture button
+                // Show opacity, zoom, capture and reset buttons
                 opacityControl.style.display = 'block';
                 zoomControl.style.display = 'block';
                 captureBtn.style.display = 'inline-block';
+                resetBtn.style.display = 'inline-block';
                 comparisonSliderGroup.style.display = 'none';
             } else {
                 // Comparison mode
@@ -742,10 +744,11 @@
                 overlay.style.display = 'none';
                 compareBtn.textContent = '📹 Atpakaļ uz kameru';
                 
-                // Hide opacity, zoom and capture button, show comparison slider
+                // Hide opacity, zoom, capture and reset buttons, show comparison slider
                 opacityControl.style.display = 'none';
                 zoomControl.style.display = 'none';
                 captureBtn.style.display = 'none';
+                resetBtn.style.display = 'none';
                 comparisonSliderGroup.style.display = 'block';
                 
                 updateSliderComparison(50);
