@@ -64,7 +64,7 @@ This application is created for personal use.
 
 ---
 
-# 📸 Tad un Tagad / Then and Now
+# 📸 Tad un Tagad / Then and Today
 
 ---
 
