@@ -60,7 +60,7 @@ This application is created for personal use.
 
 ---
 
-© DS 2025 v2.6
+© didthis.lv 2026 v2.7
 
 ---
 
@@ -130,4 +130,4 @@ Aplikācija izmanto modernu dizainu ar:
 
 ---
 
-© DS 2025 v2.6
+© didthis.lv 2026 v2.7
