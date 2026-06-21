@@ -2,6 +2,8 @@
 
 An application that allows you to compare historical photos with the present-day view using your smartphone camera.
 
+https://didthislv.github.io/tad-un-tagad/
+
 ### 🎯 Features
 
 - 📸 **Historical photo upload** - Upload an old photograph
@@ -71,6 +73,8 @@ This application is created for personal use.
 ## Latviešu valodā
 
 Aplikācija, kas ļauj salīdzināt vēsturiskos attēlus ar mūsdienu skatu, izmantojot viedtālruņa kameru.
+
+https://didthislv.github.io/tad-un-tagad/
 
 ### 🎯 Funkcijas
 
