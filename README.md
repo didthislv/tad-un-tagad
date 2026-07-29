@@ -62,7 +62,7 @@ This application is created for personal use.
 
 ---
 
-© didthis.lv 2026 v2.8
+© didthis.lv 2026 v2.9
 
 ---
 
@@ -134,4 +134,4 @@ Aplikācija izmanto modernu dizainu ar:
 
 ---
 
-© didthis.lv 2026 v2.8
+© didthis.lv 2026 v2.9
