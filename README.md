@@ -27,7 +27,7 @@ https://didthislv.github.io/tad-un-tagad/
    - Use zoom to precisely align the view
    - Capture a photo when satisfied with the position
 5. Use the comparison slider to view "then and now"
-6. Save the result!
+6. Save the result - individual images or all together!
 
 ### 📱 Mobile device requirements
 
@@ -62,7 +62,7 @@ This application is created for personal use.
 
 ---
 
-© didthis.lv 2026 v2.7
+© didthis.lv 2026 v2.8
 
 ---
 
@@ -99,7 +99,7 @@ https://didthislv.github.io/tad-un-tagad/
    - Izmanto zoom, lai precīzi izlīdzinātu
    - Uzņem foto, kad esi apmierināts ar pozīciju
 5. Izmanto salīdzināšanas slīdni, lai skatītu "tad un tagad"
-6. Saglabā rezultātu!
+6. Saglabā rezultātu - atsevišķus attēlus vai kopā!
 
 ### 📱 Mobilās ierīces prasības
 
@@ -134,4 +134,4 @@ Aplikācija izmanto modernu dizainu ar:
 
 ---
 
-© didthis.lv 2026 v2.7
+© didthis.lv 2026 v2.8
